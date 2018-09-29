@@ -2,12 +2,8 @@ import React from 'react';
 import Expo from "expo";
 import { View, Button, AsyncStorage, StyleSheet, Text, TextInput, Picker, ImageBackground, TouchableOpacity } from 'react-native';
  
-export default class RegisterScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Register screen',
-  };
-  
-  constructor(props){
+export default class EditScreen extends React.Component {
+    constructor(props){
       super(props);
       this.state = {
         name: '',
@@ -18,7 +14,11 @@ export default class RegisterScreen extends React.Component {
         goal: 0,
       }
     }
-
+ 
+    static navigationOptions = {
+        title: 'Register screen',
+      };
+ 
     //Function returning true if the required user info is entered.
     enableButton() {
       return this.state.name.length > 0 && this.state.age > 0 && this.state.weight > 0 && this.state.height > 0 && this.state.goal > 0;
@@ -93,14 +93,14 @@ export default class RegisterScreen extends React.Component {
                 </TouchableOpacity>
               </View>
               <View style={styles.buttoncontainer}>
-                <Button title="Submit" onPress={this._signInAsync} color="rgb(28, 184, 65)" disabled={this.enableButton()}/>
+                <Button title="Save" onPress={this._saveChangesAsync} color="rgb(28, 184, 65)" disabled={this.enableButton()}/>
               </View>
           </View>  
       );
     }
  
     //Function beeing called when submitting user information -> Storing info in AsyncStorage and navigating to App.
-    _signInAsync = async () => {
+    _saveChangesAsync = async () => {
       let USER_object = {
         name: this.state.name,
         age: this.state.age,
@@ -109,10 +109,28 @@ export default class RegisterScreen extends React.Component {
         height: this.state.height,
         goal: this.state.goal,
       };
-      await AsyncStorage.setItem('USER', JSON.stringify(USER_object));
+      await AsyncStorage.mergeItem('USER', JSON.stringify(USER_object));
       this.props.navigation.navigate('App');
     };
- 
+
+    //Function getting user info from AsyncStorage and connecting it to state.
+    _getUserDate = async () => {
+        await AsyncStorage.getItem('USER', (err, result) => {
+            let user = JSON.parse(result)
+            this.setState({
+                name: user.name,
+                age: user.age,
+                gender: user.gender,
+                weight: user.weight,
+                height: user.height,
+                goal: user.goal
+            });
+          });
+    }
+
+    componentDidMount() {
+        this._getUserDate();
+    }
   }
  
   const styles = StyleSheet.create({
@@ -190,4 +208,4 @@ export default class RegisterScreen extends React.Component {
     }
   });
  
-  Expo.registerRootComponent(RegisterScreen);
+  Expo.registerRootComponent(EditScreen);

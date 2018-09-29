@@ -93,7 +93,7 @@ export default class EditScreen extends React.Component {
                 </TouchableOpacity>
               </View>
               <View style={styles.buttoncontainer}>
-                <Button title="Save" onPress={this._saveChangesAsync} color="rgb(28, 184, 65)" disabled={!this.enableButton()}/>
+                <Button title="Save" onPress={this._saveChangesAsync} color="rgb(28, 184, 65)" disabled={this.enableButton()}/>
               </View>
           </View>  
       );
@@ -131,7 +131,6 @@ export default class EditScreen extends React.Component {
     componentDidMount() {
         this._getUserDate();
     }
- 
   }
  
   const styles = StyleSheet.create({

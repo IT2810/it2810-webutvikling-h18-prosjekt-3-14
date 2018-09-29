@@ -6,11 +6,17 @@ import LogoTitle from '../components/LogoTitle';
  
  
 export default class TodayScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this._editUser = this._editUser.bind(this);
+  }
+  
   static navigationOptions = {
-    headerTitle: <LogoTitle></LogoTitle>
+    headerTitle: 
+    <LogoTitle>
+    </LogoTitle>
   };
- 
- 
+
   //Function that removes user from asyncStorage and navigates back to registerScreen.
   _signOutAsync = async () => {
     //This is how to access user data, (result) is now a object with all the user attributes.

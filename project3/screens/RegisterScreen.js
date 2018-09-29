@@ -3,7 +3,11 @@ import Expo from "expo";
 import { View, Button, AsyncStorage, StyleSheet, Text, TextInput, Picker, ImageBackground, TouchableOpacity } from 'react-native';
  
 export default class RegisterScreen extends React.Component {
-    constructor(props){
+  static navigationOptions = {
+    title: 'Register screen',
+  };
+  
+  constructor(props){
       super(props);
       this.state = {
         name: '',
@@ -14,11 +18,7 @@ export default class RegisterScreen extends React.Component {
         goal: 0,
       }
     }
- 
-    static navigationOptions = {
-        title: 'Register screen',
-      };
- 
+
     //Function returning true if the required user info is entered.
     enableButton() {
       return this.state.name.length > 0 && this.state.age > 0 && this.state.weight > 0 && this.state.height > 0 && this.state.goal > 0;
@@ -93,7 +93,7 @@ export default class RegisterScreen extends React.Component {
                 </TouchableOpacity>
               </View>
               <View style={styles.buttoncontainer}>
-                <Button title="Submit" onPress={this._signInAsync} color="rgb(28, 184, 65)" disabled={!this.enableButton()}/>
+                <Button title="Submit" onPress={this._signInAsync} color="rgb(28, 184, 65)" disabled={this.enableButton()}/>
               </View>
           </View>  
       );

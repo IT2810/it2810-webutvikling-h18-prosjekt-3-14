@@ -22,33 +22,12 @@ export default class TodayScreen extends React.Component {
         userHeight: 0
     };
 
-    _updateFromStorage = async () => {
-        let user;
-        await AsyncStorage.getItem('USER', (err, result) => {
-            user = JSON.parse(result);
-        });
-
-        this.setState({userGoal: user.goal});
-        this.setState({userWeight: user.weight});
-        this.setState({userHeight: user.height});
-    };
-
-
     static navigationOptions = ({navigation}) => {
         return {
             headerTitle: <LogoTitle></LogoTitle>,
             headerLeft: <Button title={"Edit"} onPress={() => navigation.navigate("Edit")}/>
         };
     };
-
-    componentDidMount() {
-        this._subscribe();
-        this._updateFromStorage();
-    }
-
-    componentWillUnmount() {
-        this._unsubscribe();
-    }
 
     _subscribe = () => {
         this._subscription = Pedometer.watchStepCount(result => {
@@ -71,10 +50,9 @@ export default class TodayScreen extends React.Component {
         );
 
         const end = new Date();
-        const start = new Date();
+        let start = new Date();
         start.setHours(0, 0, 0, 0);
-        console.log(end);
-        console.log(start);
+
         Pedometer.getStepCountAsync(start, end).then(
             result => {
                 this.setState({pastStepCount: result.steps});
@@ -92,8 +70,32 @@ export default class TodayScreen extends React.Component {
         this._subscription = null;
     };
 
+    _updateFromStorage = async () => {
+        let user;
+        await AsyncStorage.getItem('USER', (err, result) => {
+            user = JSON.parse(result);
+        });
+
+        this.setState({userGoal: user.goal});
+        this.setState({userWeight: user.weight});
+        this.setState({userHeight: user.height});
+    };
+
     _addSpaceBetweenNumber = (number) => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    };
+
+    _getGoalProgress = () => {
+        return this.state.pastStepCount / this.state.userGoal <= 1 ? (this.state.pastStepCount / this.state.userGoal) * 100 : 100;
+    };
+
+    componentDidMount() {
+        this._subscribe();
+        this._updateFromStorage();
+    }
+
+    componentWillUnmount() {
+        this._unsubscribe();
     }
 
     render() {
@@ -102,7 +104,7 @@ export default class TodayScreen extends React.Component {
                 <AnimatedCircularProgress
                     size={300}
                     width={7}
-                    fill={(this.state.pastStepCount / this.state.userGoal) * 100}
+                    fill={this._getGoalProgress()}
                     tintColor="#00e0ff"
                     backgroundColor="#3d5875">
                     {

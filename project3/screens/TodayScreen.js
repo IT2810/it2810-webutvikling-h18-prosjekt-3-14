@@ -1,59 +1,145 @@
 import React from 'react';
 import Expo from "expo";
- 
-import { View, Text, AsyncStorage, StyleSheet, Button } from 'react-native';
+import {Pedometer, Icon} from "expo";
+
+import {View, Text, AsyncStorage, StyleSheet, Button, TouchableHighlight, Platform} from 'react-native';
+import {AnimatedCircularProgress} from 'react-native-circular-progress';
+
 import LogoTitle from '../components/LogoTitle';
- 
- 
+
+
 export default class TodayScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this._editUser = this._editUser.bind(this);
-  }
-  
-  static navigationOptions = {
-    headerTitle: 
-    <LogoTitle>
-    </LogoTitle>
-  };
+    constructor(props) {
+        super(props);
+    }
 
-  //Function that removes user from asyncStorage and navigates back to registerScreen.
-  _signOutAsync = async () => {
-    //This is how to access user data, (result) is now a object with all the user attributes.
-    await AsyncStorage.getItem('USER', (err, result) => {
-      let user = JSON.parse(result);
-      console.log(user.name);
-    });
- 
-    //Still keeping this to make it possible to navigate between register and app.
-    await AsyncStorage.removeItem('USER');
-    this.props.navigation.navigate('Auth');
-  }
+    state = {
+        isPedometerAvailable: "checking",
+        pastStepCount: 0,
+        currentStepCount: 0,
+        userGoal: 0,
+        userWeight: 0,
+        userHeight: 0
+    };
 
-  _editUser = async = () => {
-    this.props.navigation.navigate('Edit');
-  }
- 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>TodayScreen</Text>
-        <Button title="Go back/Reset" onPress={this._signOutAsync} />
-        <Button title="Edit" onPress={this._editUser} />
-      </View>
-    );
-  }
+    _updateFromStorage = async () => {
+        let user;
+        await AsyncStorage.getItem('USER', (err, result) => {
+            user = JSON.parse(result);
+        });
+
+        this.setState({userGoal: user.goal});
+        this.setState({userWeight: user.weight});
+        this.setState({userHeight: user.height});
+    };
+
+
+    static navigationOptions = ({navigation}) => {
+        return {
+            headerTitle: <LogoTitle></LogoTitle>,
+            headerLeft: <Button title={"Edit"} onPress={() => navigation.navigate("Edit")}/>
+        };
+    };
+
+    componentDidMount() {
+        this._subscribe();
+        this._updateFromStorage();
+    }
+
+    componentWillUnmount() {
+        this._unsubscribe();
+    }
+
+    _subscribe = () => {
+        this._subscription = Pedometer.watchStepCount(result => {
+            this.setState({
+                currentStepCount: result.steps
+            });
+        });
+
+        Pedometer.isAvailableAsync().then(
+            result => {
+                this.setState({
+                    isPedometerAvailable: String(result)
+                });
+            },
+            error => {
+                this.setState({
+                    isPedometerAvailable: "Could not get isPedometerAvailable: " + error
+                });
+            }
+        );
+
+        const end = new Date();
+        const start = new Date();
+        start.setHours(0, 0, 0, 0);
+        console.log(end);
+        console.log(start);
+        Pedometer.getStepCountAsync(start, end).then(
+            result => {
+                this.setState({pastStepCount: result.steps});
+            },
+            error => {
+                this.setState({
+                    pastStepCount: "Could not get stepCount: " + error
+                });
+            }
+        );
+    };
+
+    _unsubscribe = () => {
+        this._subscription && this._subscription.remove();
+        this._subscription = null;
+    };
+
+    _addSpaceBetweenNumber = (number) => {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
+    render() {
+        return (
+            <View style={styles.container}>
+                <AnimatedCircularProgress
+                    size={300}
+                    width={7}
+                    fill={(this.state.pastStepCount / this.state.userGoal) * 100}
+                    tintColor="#00e0ff"
+                    backgroundColor="#3d5875">
+                    {
+                        (fill) => (
+                            <View>
+                                <Text style={styles.textInsideCircleBig}>
+                                    {this._addSpaceBetweenNumber(this.state.pastStepCount)}
+                                </Text>
+                                <Text style={styles.textInsideCircleSmall}>OF
+                                    GOAL: {this._addSpaceBetweenNumber(this.state.userGoal)}</Text>
+                            </View>
+                        )
+                    }
+                </AnimatedCircularProgress>
+            </View>
+        );
+    }
 }
- 
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 25,
-    backgroundColor: '#fff',
-    alignItems: 'center'
-  },
+    container: {
+        flex: 1,
+        paddingTop: 25,
+        backgroundColor: '#fff',
+        alignItems: 'center'
+    },
+
+    textInsideCircleBig: {
+        textAlign: 'center',
+        fontSize: 40
+    },
+    textInsideCircleSmall: {
+        textAlign: 'center',
+        fontSize: 10
+    }
 });
- 
+
 Expo.registerRootComponent(TodayScreen);
 
  

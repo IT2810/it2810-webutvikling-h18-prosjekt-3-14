@@ -29,38 +29,42 @@ export default class TodayScreen extends React.Component {
         };
     };
 
-    _subscribe = () => {
-        this._subscription = Pedometer.watchStepCount(result => {
-            this.setState({
-                currentStepCount: result.steps
-            });
-        });
-
-        Pedometer.isAvailableAsync().then(
+    _subscribe = async () => {
+        await Pedometer.isAvailableAsync()
+            .then(
             result => {
                 this.setState({
-                    isPedometerAvailable: String(result)
+                    isPedometerAvailable: true,
+                    pedometerStatusMsg: String(result)
                 });
             },
             error => {
                 this.setState({
-                    isPedometerAvailable: "Could not get isPedometerAvailable: " + error
+                    isPedometerAvailable: false,
+                    pedometerStatusMsg: "Pedometer not available: " + error
                 });
             }
-        );
+        )
+            .then( () => {
+                if (!this.state.isPedometerAvailable) {
+                    throw new Error(this.state.pedometerStatusMsg);
+                }
+            });
 
         const end = new Date();
         let start = new Date();
         start.setHours(0, 0, 0, 0);
 
-        Pedometer.getStepCountAsync(start, end).then(
+        await Pedometer.getStepCountAsync(start, end).then(
             result => {
                 this.setState({pastStepCount: result.steps});
             },
             error => {
                 this.setState({
-                    pastStepCount: "Could not get stepCount: " + error
+                    pastStepCount: 0,
+                    pedometerStatusMsg: "Could not get stepCount: " + error
                 });
+                throw new Error(this.state.pedometerStatusMsg);
             }
         );
     };
@@ -76,21 +80,35 @@ export default class TodayScreen extends React.Component {
             user = JSON.parse(result);
         });
 
-        this.setState({userGoal: user.goal});
-        this.setState({userWeight: user.weight});
-        this.setState({userHeight: user.height});
+        this.setState({
+            userGoal: user.goal,
+            userWeight: user.weight,
+            userHeight: user.height
+        });
     };
 
-    _addSpaceBetweenNumber = (number) => {
-        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    };
-
-    _getGoalProgress = () => {
+    _calculateGoalProgress = () => {
         return this.state.pastStepCount / this.state.userGoal <= 1 ? (this.state.pastStepCount / this.state.userGoal) * 100 : 100;
     };
 
-    componentDidMount() {
-        this._subscribe();
+    _calculateDistanceWalked = () => {
+
+    }
+
+    async componentDidMount() {
+        try {
+            await this._subscribe();
+        }
+        catch (e) {
+            Alert.alert(
+                e.message,
+                this.state.pedometerStatusMsg,
+                [
+                    {text: 'OK'},
+                ],
+                {cancelable: false}
+            );
+        }
         this._updateFromStorage();
     }
 

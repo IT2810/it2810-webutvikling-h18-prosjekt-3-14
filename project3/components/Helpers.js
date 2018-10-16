@@ -13,13 +13,17 @@ export default class Helpers {
             throw new RangeError("Input out of range");
         }
 
-        let distance = Helpers._calculateDistance(height,steps);
-        let time = distance/1.34112;
-        let met = (distance/time*2.23693629);
+        const distance = parseFloat(Helpers._calculateDistance(height,steps));
+        const time = distance/1.34112;
+        const met = (distance/time*2.23693629);
         return Math.round(met * 3.5 * (weight) / 200 * (time/60)); // formula found online
     };
 
     static _addSpaceBetweenNumber = (number) => {
+        if (typeof number !== typeof 0) {
+            return NaN;
+        };
+
         return number != null ? number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") : null;
     };
 
@@ -27,12 +31,12 @@ export default class Helpers {
         if (typeof weight !== typeof 0 || typeof height !== typeof 0) {
             throw new TypeError("Input not numbers");
         }
-        if (weight < 0 || height < 0) {
+        if (weight < 0 || height <= 0) {
             throw new RangeError("Input out of range");
         }
 
         height = height === 0 ? 1 : height;
-        return (weight / ((height/100))**2).toFixed(2);
+        return weight / ((height/100))**2;
     };
 
     static _calculateDistance = (height, steps) => {
@@ -44,7 +48,7 @@ export default class Helpers {
         }
 
         let sd = (height*0.414)/100; // step distance. Formula found online
-        return ((steps * sd)/1000).toFixed(2);
+        return (steps * sd);
     };
 
     static _mapInt = (mappedNumber, inMin, inMax, outMin, outMax) => {
@@ -52,6 +56,9 @@ export default class Helpers {
     };
 
     static _calculateGoalProgress = (current, goal) => {
+        if (current < 0 || goal <= 0) {
+            throw new RangeError("Goal cannot be 0 or lower");
+        }
         return current / goal <= 1 ? (current / goal) * 100 : 100;
     };
 

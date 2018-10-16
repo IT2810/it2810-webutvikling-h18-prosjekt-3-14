@@ -21,7 +21,7 @@ export default class EditScreen extends React.Component {
  
     //Function returning true if the required user info is entered.
     enableButton() {
-      return this.state.name.length > 0 && this.state.age > 0 && this.state.weight > 0 && this.state.height > 0 && this.state.goal > 0;
+      return !(this.state.name.length > 0 && this.state.age > 0 && this.state.weight > 0 && this.state.height > 0 && this.state.goal > 0);
     }
  
     render() {

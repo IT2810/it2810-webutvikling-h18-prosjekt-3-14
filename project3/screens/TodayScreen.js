@@ -4,7 +4,8 @@ import {Pedometer, Icon} from "expo";
 import Helpers from "./../components/Helpers"
 import { Col, Row, Grid } from "react-native-easy-grid";
 
-import {View, Text, AsyncStorage, StyleSheet, Button, TouchableHighlight, Platform, Alert} from 'react-native';
+
+import {View, Text, AsyncStorage, StyleSheet, Button, Alert, Dimensions} from 'react-native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
 import LogoTitle from '../components/LogoTitle';
@@ -16,7 +17,7 @@ export default class TodayScreen extends React.Component {
     }
 
     state = {
-        isPedometerAvailable: false,
+        isPedometerAvailable: null,
         pedometerStatusMsg: "checking",
         pastStepCount: null,
         userGoal: null,
@@ -25,10 +26,8 @@ export default class TodayScreen extends React.Component {
     };
 
     constants = {
-        circularBigSize: 300,
-        circularBigWidth: 10,
-        circularSmallSize: 50,
-        circularSmallWidth: 7,
+        circularBigSize: Dimensions.get('window').width * (3/4),
+        circularBigWidth: Dimensions.get('window').width/30,
     };
 
     static navigationOptions = ({navigation}) => {
@@ -48,22 +47,16 @@ export default class TodayScreen extends React.Component {
             .then(
             result => {
                 this.setState({
-                    isPedometerAvailable: true,
-                    pedometerStatusMsg: String(result)
+                  isPedometerAvailable: (result == 'true'),
                 });
             },
             error => {
                 this.setState({
-                    isPedometerAvailable: false,
-                    pedometerStatusMsg: "Pedometer not available: " + error
+                  isPedometerAvailable: (result == 'true'),
+                  pedometerStatusMsg: "Pedometer not available: " + error
                 });
             }
-        )
-            .then( () => {
-                if (!this.state.isPedometerAvailable) {
-                    throw new Error(this.state.pedometerStatusMsg);
-                }
-            });
+        );
 
         const end = new Date();
         let start = new Date();
@@ -71,14 +64,17 @@ export default class TodayScreen extends React.Component {
 
         await Pedometer.getStepCountAsync(start, end).then(
             result => {
-                this.setState({pastStepCount: result.steps});
+                this.setState({
+                  isPedometerAvailable: true,
+                  pastStepCount: result.steps});
             },
             error => {
                 this.setState({
+                    isPedometerAvailable: true,
                     pastStepCount: 0,
-                    pedometerStatusMsg: "Could not get stepCount: " + error
+                    pedometerStatusMsg: "Could not get stepCount"
                 });
-                throw new Error(this.state.pedometerStatusMsg);
+                throw new Error(error);
             }
         );
     };
@@ -112,8 +108,8 @@ export default class TodayScreen extends React.Component {
         }
         catch (e) {
             Alert.alert(
-                e.message,
                 this.state.pedometerStatusMsg,
+                e.message,
                 [
                     {text: 'OK'},
                 ],
@@ -143,60 +139,61 @@ export default class TodayScreen extends React.Component {
         const distnaceDisplayed = distance > 1000 ? distance/1000 : distance;
         let distanceUnit = distance > 1000 ? "KM" : "M";
 
-
-        if (this.state.isPedometerAvailable) {
-            return (
-                <View style={styles.container}>
-                    <Grid>
-                        <Row size={3}>
-                            <AnimatedCircularProgress
-                                size={this.constants.circularBigSize}
-                                width={this.constants.circularBigWidth}
-                                fill={stepGoal}
-                                tintColor="#00e0ff"
-                                backgroundColor="#3d5875">
-                                {
-                                    (fill) => (
-                                        <View>
-                                            <Text style={styles.textInsideCircleBig}>
-                                                {Helpers._addSpaceBetweenNumber(this.state.pastStepCount)}
-                                            </Text>
-                                            <Text style={styles.textInsideCircleSmall}>OF
-                                                GOAL: {Helpers._addSpaceBetweenNumber(parseInt(this.state.userGoal))}</Text>
-                                        </View>
-                                    )
-                                }
-                            </AnimatedCircularProgress>
-                        </Row>
-                    {/*<Grid style={styles.gridConent}>*/}
-                    <Row size={1}>
-                      <Col>
-                        <Text style={styles.underTextLarge}>{(distnaceDisplayed).toFixed(2)}</Text>
-                        <Text style={styles.underTextSmall}>{distanceUnit}</Text>
-                      </Col>
-                      <Col>
-                        <Text style={styles.underTextLarge}>{calories}</Text>
-                        <Text style={styles.underTextSmall}>Calories</Text>
-                      </Col>
-                      <Col>
-                        <Text style={styles.underTextLarge}>{bmiStages[0].toFixed(2)}</Text>
-                        <Text style={styles.underTextSmall}>BMI</Text>
-                      </Col>
-                    </Row>
-                    </Grid>
-                </View>
-            );
-        } else {
-            return (
-                <View style={styles.container}>
-                    <Text>{this.state.pedometerStatusMsg}</Text>
-                    <Button title={"Check for accelerometer"} onPress={this._subscribe}/>
-                </View>
-            );
-        }
+        console.log(this.state.isPedometerAvailable);
+      if (!this.state.isPedometerAvailable) {
+        return (
+          <View style={styles.container}>
+            <Text>{this.state.pedometerStatusMsg}</Text>
+            <Button title={"Check for accelerometer"} onPress={this._subscribe}/>
+          </View>
+        );
+      } else {
+        return (
+          <View style={styles.container}>
+            <Grid>
+              <Row size={3}>
+                <AnimatedCircularProgress
+                  size={this.constants.circularBigSize}
+                  width={this.constants.circularBigWidth}
+                  fill={stepGoal}
+                  tintColor="#00e0ff"
+                  backgroundColor="#3d5875">
+                  {
+                    (fill) => (
+                      <View>
+                        <Text style={styles.textInsideCircleBig}>
+                          {Helpers._addSpaceBetweenNumber(this.state.pastStepCount)}
+                        </Text>
+                        <Text style={styles.textInsideCircleSmall}>OF
+                          GOAL: {Helpers._addSpaceBetweenNumber(parseInt(this.state.userGoal))}</Text>
+                      </View>
+                    )
+                  }
+                </AnimatedCircularProgress>
+              </Row>
+              {/*<Grid style={styles.gridConent}>*/}
+              <Row size={1}>
+                <Col>
+                  <Text style={styles.underTextLarge}>{(distnaceDisplayed).toFixed(2)}</Text>
+                  <Text style={styles.underTextSmall}>{distanceUnit}</Text>
+                </Col>
+                <Col>
+                  <Text style={styles.underTextLarge}>{calories}</Text>
+                  <Text style={styles.underTextSmall}>Calories</Text>
+                </Col>
+                <Col>
+                  <Text style={styles.underTextLarge}>{bmiStages[0].toFixed(2)}</Text>
+                  <Text style={styles.underTextSmall}>BMI</Text>
+                </Col>
+              </Row>
+            </Grid>
+          </View>
+        );
+      }
     }
 }
 
+const screen = Dimensions.get('window')
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -207,24 +204,26 @@ const styles = StyleSheet.create({
 
     textInsideCircleBig: {
         textAlign: 'center',
-        fontSize: 40
+        fontSize: screen.width * (2/15),
     },
+
     textInsideCircleSmall: {
         textAlign: 'center',
-        fontSize: 10
+      fontSize: screen.width * (1/35),
+
     },
 
-  underTextLarge: {
+    underTextLarge: {
         textAlign: 'center',
-    fontSize: 20,
-    margin: '-1%'
-  },
+        fontSize: screen.width * (1/15),
+        margin: '-1%'
+     },
 
-  underTextSmall: {
+     underTextSmall: {
         textAlign: 'center',
-    fontSize: 10,
-    margin: '-1%',
-  }
+        fontSize: screen.width * (1/35),
+        margin: '-1%',
+     }
 });
 
 Expo.registerRootComponent(TodayScreen);

@@ -130,7 +130,7 @@ export default class TodayScreen extends React.Component {
         const pastSteps = parseInt(this.state.pastStepCount);
 
         const bmi = Helpers._calculateBMI(weight, height);
-        const bmiStages = Helpers._getBMIstage(parseFloat(bmi));
+        // const bmiStages = Helpers._getBMIstage(parseFloat(bmi));
         const calories = Helpers._calculateCaloriesBurned(weight, height, pastSteps);
         const stepGoal = Helpers._calculateGoalProgress(pastSteps, goal);
         const distance = Helpers._calculateDistance(height, pastSteps);
@@ -171,7 +171,6 @@ export default class TodayScreen extends React.Component {
                   }
                 </AnimatedCircularProgress>
               </Row>
-              {/*<Grid style={styles.gridConent}>*/}
               <Row size={1}>
                 <Col>
                   <Text style={styles.underTextLarge}>{(distnaceDisplayed).toFixed(2)}</Text>
@@ -182,7 +181,7 @@ export default class TodayScreen extends React.Component {
                   <Text style={styles.underTextSmall}>Calories</Text>
                 </Col>
                 <Col>
-                  <Text style={styles.underTextLarge}>{bmiStages[0].toFixed(2)}</Text>
+                  <Text style={styles.underTextLarge}>{bmi.toFixed(2)}</Text>
                   <Text style={styles.underTextSmall}>BMI</Text>
                 </Col>
               </Row>
@@ -193,7 +192,7 @@ export default class TodayScreen extends React.Component {
     }
 }
 
-const screen = Dimensions.get('window')
+const screen = Dimensions.get('window');
 const styles = StyleSheet.create({
     container: {
         flex: 1,

@@ -1,19 +1,34 @@
 import React from 'react';
 import Expo, {Pedometer} from "expo";
-import {View, Text, AsyncStorage, StyleSheet, Button, Alert, Dimensions} from 'react-native';
+import {View, Text, AsyncStorage, StyleSheet, Button, Alert, TouchableHighlight} from 'react-native';
 
 import {Col, Row, Grid} from "react-native-easy-grid";
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 import Helpers from "./../components/Helpers"
 import LogoTitle from '../components/LogoTitle';
-
+import colors from '../constants/Colors';
+import layout from '../constants/Layout'
 
 export default class TodayScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
     return {
       headerTitle: <LogoTitle></LogoTitle>,
-      headerLeft: <Button title={"Edit"} onPress={() => navigation.navigate("Edit")}/>
+      headerLeft:
+        <TouchableHighlight
+          onPress={() => navigation.navigate("Edit")}
+          style={styles.button}
+          underlayColor={colors.buttonUnderlay}
+          activeOpacity={0.7}
+        >
+          <Icon
+            name={'cog'}
+            color={colors.buttonDefault}
+            size={width / 15}
+          />
+        </TouchableHighlight>
     };
   };
 

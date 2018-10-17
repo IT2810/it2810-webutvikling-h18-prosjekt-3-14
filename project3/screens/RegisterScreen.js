@@ -109,7 +109,7 @@ export default class RegisterScreen extends React.Component {
         height: this.state.height,
         goal: this.state.goal,
       };
-      await AsyncStorage.setItem('USER', JSON.stringify(USER_object));
+      await AsyncStorage.setItem('userToken', JSON.stringify(USER_object));
       this.props.navigation.navigate('App');
     };
  

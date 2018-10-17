@@ -2,6 +2,7 @@ import React from 'react';
 import Expo from "expo";
 import {Pedometer, Icon} from "expo";
 import Helpers from "./../components/Helpers"
+import { Col, Row, Grid } from "react-native-easy-grid";
 
 import {View, Text, AsyncStorage, StyleSheet, Button, TouchableHighlight, Platform, Alert} from 'react-native';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
@@ -146,27 +147,43 @@ export default class TodayScreen extends React.Component {
         if (this.state.isPedometerAvailable) {
             return (
                 <View style={styles.container}>
-                    <AnimatedCircularProgress
-                        size={this.constants.circularBigSize}
-                        width={this.constants.circularBigWidth}
-                        fill={stepGoal}
-                        tintColor="#00e0ff"
-                        backgroundColor="#3d5875">
-                        {
-                            (fill) => (
-                                <View>
-                                    <Text style={styles.textInsideCircleBig}>
-                                        {Helpers._addSpaceBetweenNumber(this.state.pastStepCount)}
-                                    </Text>
-                                    <Text style={styles.textInsideCircleSmall}>OF
-                                        GOAL: {Helpers._addSpaceBetweenNumber(this.state.userGoal)}</Text>
-                                </View>
-                            )
-                        }
-                    </AnimatedCircularProgress>
-                    <Text>Distance: {distance} km</Text>
-                    <Text>Calories: {calories}</Text>
-                    <Text style={{color: bmiStages[2]}}>BMI: {bmiStages[0]}: {bmiStages[1]}</Text>
+                    <Grid>
+                        <Row size={3}>
+                            <AnimatedCircularProgress
+                                size={this.constants.circularBigSize}
+                                width={this.constants.circularBigWidth}
+                                fill={stepGoal}
+                                tintColor="#00e0ff"
+                                backgroundColor="#3d5875">
+                                {
+                                    (fill) => (
+                                        <View>
+                                            <Text style={styles.textInsideCircleBig}>
+                                                {Helpers._addSpaceBetweenNumber(this.state.pastStepCount)}
+                                            </Text>
+                                            <Text style={styles.textInsideCircleSmall}>OF
+                                                GOAL: {Helpers._addSpaceBetweenNumber(parseInt(this.state.userGoal))}</Text>
+                                        </View>
+                                    )
+                                }
+                            </AnimatedCircularProgress>
+                        </Row>
+                    {/*<Grid style={styles.gridConent}>*/}
+                    <Row size={1}>
+                      <Col>
+                        <Text style={styles.underTextLarge}>{(distnaceDisplayed).toFixed(2)}</Text>
+                        <Text style={styles.underTextSmall}>{distanceUnit}</Text>
+                      </Col>
+                      <Col>
+                        <Text style={styles.underTextLarge}>{calories}</Text>
+                        <Text style={styles.underTextSmall}>Calories</Text>
+                      </Col>
+                      <Col>
+                        <Text style={styles.underTextLarge}>{bmiStages[0].toFixed(2)}</Text>
+                        <Text style={styles.underTextSmall}>BMI</Text>
+                      </Col>
+                    </Row>
+                    </Grid>
                 </View>
             );
         } else {
@@ -184,7 +201,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 25,
-        backgroundColor: '#fff',
+        backgroundColor: '#FFF',
         alignItems: 'center'
     },
 
@@ -195,7 +212,19 @@ const styles = StyleSheet.create({
     textInsideCircleSmall: {
         textAlign: 'center',
         fontSize: 10
-    }
+    },
+
+  underTextLarge: {
+        textAlign: 'center',
+    fontSize: 20,
+    margin: '-1%'
+  },
+
+  underTextSmall: {
+        textAlign: 'center',
+    fontSize: 10,
+    margin: '-1%',
+  }
 });
 
 Expo.registerRootComponent(TodayScreen);

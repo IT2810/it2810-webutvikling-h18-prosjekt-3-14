@@ -6,7 +6,6 @@ import {Col, Row, Grid} from "react-native-easy-grid";
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-
 import Helpers from "./../components/Helpers"
 import LogoTitle from '../components/LogoTitle';
 import colors from '../constants/Colors';

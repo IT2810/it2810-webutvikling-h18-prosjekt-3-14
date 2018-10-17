@@ -1,3 +1,5 @@
+import Expo from 'expo'
+
 export default class Helpers {
 
   /**
@@ -22,7 +24,8 @@ export default class Helpers {
   };
 
   /**
-   * Formats numbers to have spaces for every third number. 1000 -> 1 000
+   * Formats numbers to have spaces for every third number. 1000 -> 1 000.
+   * Regex found: {@link https://answers.acrobatusers.com/How-to-separate-thousands-with-space-and-adding-2-decimal-places-q282162.aspx}
    * @param number
    * @returns {String}
    */

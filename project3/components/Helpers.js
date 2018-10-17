@@ -48,7 +48,7 @@ export default class Helpers {
         }
 
         let sd = (height*0.414)/100; // step distance. Formula found online
-        return (steps * sd);
+        return steps * sd;
     };
 
     static _mapInt = (mappedNumber, inMin, inMax, outMin, outMax) => {
@@ -56,6 +56,9 @@ export default class Helpers {
     };
 
     static _calculateGoalProgress = (current, goal) => {
+        if (typeof current !== typeof 0 || typeof goal !== typeof 0) {
+            throw new TypeError("Input not numbers");
+        }
         if (current < 0 || goal <= 0) {
             throw new RangeError("Goal cannot be 0 or lower");
         }

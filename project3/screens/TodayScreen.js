@@ -26,7 +26,7 @@ export default class TodayScreen extends React.Component {
           <Icon
             name={'cog'}
             color={colors.buttonDefault}
-            size={width / 15}
+            size={30}
           />
         </TouchableHighlight>
     };

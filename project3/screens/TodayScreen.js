@@ -127,14 +127,21 @@ export default class TodayScreen extends React.Component {
     }
 
     render() {
-        const bmi = Helpers._calculateBMI(parseInt(this.state.userWeight), parseInt(this.state.userHeight));
-        const bmiStages = Helpers._getBMIstage(parseFloat(bmi));
-        const calories = Helpers._calculateCaloriesBurned(parseInt(this.state.userWeight), parseInt(this.state.userHeight), parseInt(this.state.pastStepCount));
-        const distance = Helpers._calculateDistance(parseInt(this.state.userHeight), parseInt(this.state.pastStepCount));
+        const goal = parseInt(this.state.userGoal);
+        const height = parseInt(this.state.userHeight);
+        const weight = parseInt(this.state.userWeight);
+        const pastSteps = parseInt(this.state.pastStepCount);
 
-        const stepGoal = Helpers._calculateGoalProgress(parseInt(this.state.pastStepCount), parseInt(this.state.userGoal));
-        const distanceGoal = Helpers._calculateGoalProgress(parseInt(this.state.pastStepCount), parseInt(this.state.userGoal));
-        const caloriesGoal = Helpers._calculateGoalProgress(parseInt(this.state.pastStepCount), parseInt(this.state.userGoal));
+        const bmi = Helpers._calculateBMI(weight, height);
+        const bmiStages = Helpers._getBMIstage(parseFloat(bmi));
+        const calories = Helpers._calculateCaloriesBurned(weight, height, pastSteps);
+        const stepGoal = Helpers._calculateGoalProgress(pastSteps, goal);
+        const distance = Helpers._calculateDistance(height, pastSteps);
+
+
+        const distnaceDisplayed = distance > 1000 ? distance/1000 : distance;
+        let distanceUnit = distance > 1000 ? "KM" : "M";
+
 
         if (this.state.isPedometerAvailable) {
             return (

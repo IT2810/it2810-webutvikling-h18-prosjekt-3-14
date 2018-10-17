@@ -42,8 +42,8 @@ export default class TodayScreen extends React.Component {
   };
 
   constants = {
-    circularBigSize: Dimensions.get('window').width * (3 / 4),
-    circularBigWidth: Dimensions.get('window').width / 30,
+    circularBigSize: width * (3 / 4),
+    circularBigWidth: width / 30,
   };
 
   /**
@@ -194,7 +194,7 @@ export default class TodayScreen extends React.Component {
   }
 }
 
-const screen = Dimensions.get('window');
+const width = layout.windowSize.width; //Get sizes of the users screen
 const styles = StyleSheet.create({
   container: {
     flex: 1,

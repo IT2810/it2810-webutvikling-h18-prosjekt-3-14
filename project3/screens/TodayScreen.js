@@ -46,48 +46,38 @@ export default class TodayScreen extends React.Component {
     circularBigWidth: width / 30,
   };
 
+  constructor(props) {
+    super(props);
+  }
+
   /**
-   * Subscribes to pedometer updates and gets todays steps
+   * Get todays steps from pedometer
    * @returns {Promise<void>}
    * @private
    */
-  _subscribe = async () => {
-    await Pedometer.isAvailableAsync()
+  async getStepCount() {
+    // Set dates
+    const end = new Date();
+    let start = new Date();
+    start.setHours(0, 0, 0, 0);   // Set time so that you get all steps from 00:00 today
+
+    await Pedometer.getStepCountAsync(start, end)
       .then(
         result => {
           this.setState({
-            isPedometerAvailable: (result == 'true'),
+            isPedometerAvailable: true,
+            pastStepCount: result.steps
           });
         },
         error => {
           this.setState({
-            isPedometerAvailable: (result == 'true'),
-            pedometerStatusMsg: "Pedometer not available: " + error
+            isPedometerAvailable: false,
+            pastStepCount: 0,
+            pedometerStatusMsg: "Could not get stepCount"
           });
+          throw new Error(error);
         }
       );
-
-    // Set dates
-    const end = new Date();
-    let start = new Date();
-    start.setHours(0, 0, 0, 0);
-
-    await Pedometer.getStepCountAsync(start, end).then(
-      result => {
-        this.setState({
-          isPedometerAvailable: true,
-          pastStepCount: result.steps
-        });
-      },
-      error => {
-        this.setState({
-          isPedometerAvailable: true,
-          pastStepCount: 0,
-          pedometerStatusMsg: "Could not get stepCount"
-        });
-        throw new Error(error);
-      }
-    );
   };
 
   /**
@@ -95,7 +85,7 @@ export default class TodayScreen extends React.Component {
    * @returns {Promise<void>}
    * @private
    */
-  _updateFromStorage = async () => {
+  async updateFromStorage() {
     let user;
     await AsyncStorage.getItem('USER', (err, result) => {
       user = JSON.parse(result);
@@ -108,15 +98,11 @@ export default class TodayScreen extends React.Component {
     });
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   async componentDidMount() {
     try {
-      await this._subscribe();
+      await this.getStepCount();
     }
-    catch (e) {
+    catch (e) { // Send an alert with the error message
       Alert.alert(
         this.state.pedometerStatusMsg,
         e.message,
@@ -124,56 +110,57 @@ export default class TodayScreen extends React.Component {
         {cancelable: false}
       );
     }
-    this._updateFromStorage();
+    this.updateFromStorage();
   }
 
   render() {
+    // Parse states
     const goal = parseInt(this.state.userGoal);
     const height = parseInt(this.state.userHeight);
     const weight = parseInt(this.state.userWeight);
     const pastSteps = parseInt(this.state.pastStepCount);
 
-    const bmi = Helpers._calculateBMI(weight, height);
-    // const bmiStages = Helpers._getBMIstage(parseFloat(bmi));
-    const calories = Helpers._calculateCaloriesBurned(weight, height, pastSteps);
-    const stepGoal = Helpers._calculateGoalProgress(pastSteps, goal);
-    const distance = Helpers._calculateDistance(height, pastSteps);
+    const bmi = Helpers.calculateBMI(weight, height);
+    const calories = Helpers.calculateCaloriesBurned(weight, height, pastSteps);
+    const stepGoal = Helpers.calculateGoalProgress(pastSteps, goal); //Step goal is between 0-100 as it is used for the percentage to fill the progress bar
 
+    // Display distance with appropriate unit
+    const distance = Helpers.calculateDistance(height, pastSteps);
     const distnaceDisplayed = distance > 1000 ? distance / 1000 : distance;
-    let distanceUnit = distance > 1000 ? "KM" : "M";
+    const distanceUnit = distance > 1000 ? "KM" : "M";
 
-    if (!this.state.isPedometerAvailable) {
+    if (!this.state.isPedometerAvailable) { // Show error screen if there pedometer isn't available
       return (
         <View style={styles.container}>
           <Text>{this.state.pedometerStatusMsg}</Text>
-          <Button title={"Check for accelerometer"} onPress={this._subscribe}/>
+          <Button title={"Check for accelerometer"} onPress={this.getStepCount}/>
         </View>
       );
     } else {
       return (
         <View style={styles.container}>
-          <Grid>
+          <Grid>  /* Grid with 2 rows*/
             <Row size={3}>
               <AnimatedCircularProgress
                 size={this.constants.circularBigSize}
                 width={this.constants.circularBigWidth}
                 fill={stepGoal}
-                tintColor="#00e0ff"
-                backgroundColor="#3d5875">
+                tintColor={colors.progressTint}
+                backgroundColor={colors.progressBackground}>
                 {
                   (fill) => (
                     <View>
                       <Text style={styles.textInsideCircleBig}>
-                        {Helpers._addSpaceBetweenNumber(this.state.pastStepCount)}
+                        {Helpers.addSpaceBetweenNumber(this.state.pastStepCount)}
                       </Text>
                       <Text style={styles.textInsideCircleSmall}>OF
-                        GOAL: {Helpers._addSpaceBetweenNumber(parseInt(this.state.userGoal))}</Text>
+                        GOAL: {Helpers.addSpaceBetweenNumber(parseInt(this.state.userGoal))}</Text>
                     </View>
                   )
                 }
               </AnimatedCircularProgress>
             </Row>
-            <Row size={1}>
+            <Row size={1}> /* 3 internal columns for separating the 3 different values*/
               <Col>
                 <Text style={styles.underTextLarge}>{(distnaceDisplayed).toFixed(2)}</Text>
                 <Text style={styles.underTextSmall}>{distanceUnit}</Text>
@@ -199,31 +186,35 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 25,
-    backgroundColor: '#FFF',
+    backgroundColor: colors.defaultBackground,
     alignItems: 'center'
   },
 
   textInsideCircleBig: {
     textAlign: 'center',
-    fontSize: screen.width * (2 / 15),
+    fontSize: width * (2 / 15), // Use screen width to get relative sizes
   },
 
   textInsideCircleSmall: {
     textAlign: 'center',
-    fontSize: screen.width * (1 / 35),
+    fontSize: width * (1 / 35),
 
   },
 
   underTextLarge: {
     textAlign: 'center',
-    fontSize: screen.width * (1 / 15),
+    fontSize: width * (1 / 15),
     margin: '-1%'
   },
 
   underTextSmall: {
     textAlign: 'center',
-    fontSize: screen.width * (1 / 35),
+    fontSize: width * (1 / 35),
     margin: '-1%',
+  },
+
+  button: {
+    left: '20%'
   }
 });
 

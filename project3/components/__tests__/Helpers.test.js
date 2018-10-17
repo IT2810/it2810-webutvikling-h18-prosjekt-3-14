@@ -1,14 +1,13 @@
 import Helpers from "./../Helpers"
 
 
-
 // Calculate BMI
 test('_calculateBMI: Check general BMI example. Calculated using formula for BMI', () => {
     expect(Helpers._calculateBMI(80, 180)).toBe(24.691358024691358);
 });
 
 test('_calculateBMI: Check BMI with zero input', () => {
-    expect(()=>Helpers._calculateBMI(0,0)).toThrow(RangeError);
+    expect(()=>{Helpers._calculateBMI(0,0)}).toThrow(RangeError);
 });
 
 test('_calculateBMI: Check BMI with not number input', () => {
@@ -52,11 +51,11 @@ test('_calculateCaloriesBurned: Check not number', () => {
 
 // Calculate distance
 test('_calculateDistance: Check general example', () => {
-    expect(()=>Helpers._calculateDistance(183, 1000)).toBe("0.76"); //TODO: Find actual example
+    expect(Helpers._calculateDistance(183, 1000)).toBe(757.62); //TODO: Find actual example
 });
 
 test('_calculateDistance: Check for 0', () => {
-    expect(()=>Helpers._calculateDistance(0, 0)).toBe(0);
+    expect(Helpers._calculateDistance(0, 0)).toBe(0);
 });
 
 test('_calculateDistance: Check for negative numbers', () => {
@@ -69,7 +68,7 @@ test('_calculateDistance: Check for not number', () => {
 
 // Calculate goal progress
 test('_calculateGoalProgress: Check general example', () => {
-    expect(()=>Helpers._calculateGoalProgress(10, 100)).toBe(10);
+    expect(Helpers._calculateGoalProgress(10, 100)).toBe(10);
 });
 
 test('_calculateGoalProgress: Check 0', () => {
@@ -81,12 +80,12 @@ test('_calculateGoalProgress: Check negative', () => {
 });
 
 test('_calculateGoalProgress: Check not number', () => {
-    expect(()=>Helpers._calculateGoalProgress([2], "hello")).toThrow(RangeError);
+    expect(()=>Helpers._calculateGoalProgress([2], "hello")).toThrow(TypeError);
 });
 
 // As the _calculateGoalProgress function is used for calculating the percentage to fill the circular progress bar, all current > goal => 100
 test('_calculateGoalProgress: Check current > goal', () => {
-    expect(()=>Helpers._calculateGoalProgress(1000, 100)).toBe(100);
+    expect(Helpers._calculateGoalProgress(1000, 100)).toBe(100);
 });
 
 

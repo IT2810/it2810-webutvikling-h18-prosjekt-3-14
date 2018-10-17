@@ -16,8 +16,10 @@
     "@expo/samples": "2.1.1",
     "expo": "^30.0.1",
     "react": "16.3.1",
+    "react-css-grid": "^2.0.0-0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
     "react-native-circular-progress": "^1.0.1",
+    "react-native-easy-grid": "^0.2.0",
     "react-native-elements": "^0.19.1",
     "react-navigation": "^2.16.0"
   },

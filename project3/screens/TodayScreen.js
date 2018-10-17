@@ -17,10 +17,10 @@ export default class TodayScreen extends React.Component {
     state = {
         isPedometerAvailable: false,
         pedometerStatusMsg: "checking",
-        pastStepCount: 0,
-        userGoal: 0,
-        userWeight: 0,
-        userHeight: 0
+        pastStepCount: null,
+        userGoal: null,
+        userWeight: null,
+        userHeight: null,
     };
 
     constants = {

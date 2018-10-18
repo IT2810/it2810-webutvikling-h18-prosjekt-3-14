@@ -32,7 +32,7 @@ const TodayStack = createStackNavigator({
             <Icon
               name={'cog'}
               color={colors.buttonDefault}
-              size={26}
+              size={30}
             />
           </TouchableHighlight>
       })
@@ -97,6 +97,6 @@ export default createBottomTabNavigator({
 
 const styles = StyleSheet.create({
   button: {
-    left: '20%',
+    left: '25%',
   },
 });

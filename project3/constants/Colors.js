@@ -9,7 +9,7 @@ const colors = {
   warningText: '#666804',
   noticeBackground: '#2f95dc',
   noticeText: '#fff',
-  buttonDefault: '#757575',
+  buttonDefault: '#555555',
   buttonUnderlay: '#fff',
   progressTint: '#00e0ff',
   progressBackground: '#3d5875',

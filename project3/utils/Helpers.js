@@ -31,7 +31,7 @@ const helpers = {
   addSpaceBetweenNumber: (number) => {
     if (typeof number !== typeof 0)
       return NaN;
-    
+
 
     return number != null ? number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") : null;
   },
@@ -87,13 +87,15 @@ const helpers = {
     return current / goal <= 1 ? (current / goal) * 100 : 100;
   },
 
-  getStepCountBetweenDates: async (start=new Date(), end=new Date()) => {
+  getStepCountBetweenDates: async (start = new Date(), end = new Date()) => {
     start.setHours(0, 0, 0, 0);   // Set time so that you get all steps from 00:00 today
 
     return await Pedometer.getStepCountAsync(start, end)
       .then(
         (result) => result.steps,
-        (error) => {throw new Error(error)});
+        (error) => {
+          throw new Error(error)
+        });
   },
 };
 

@@ -2,17 +2,18 @@ import React from 'react';
 import {Platform, StyleSheet, TouchableHighlight} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import {createStackNavigator, createBottomTabNavigator} from 'react-navigation';
+import {createBottomTabNavigator, createStackNavigator} from 'react-navigation';
 
-import TabBarIcon from '../components/TabBarIcon';
 import TodayScreen from '../screens/TodayScreen';
 import EditScreen from '../screens/EditScreen';
 import WeekScreen from '../screens/WeekScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
+import TabBarIcon from '../components/TabBarIcon';
+import LogoTitle from '../components/LogoTitle';
+
 import colors from '../constants/Colors';
 
-import LogoTitle from '../components/LogoTitle';
 
 const TodayStack = createStackNavigator({
     Today: {

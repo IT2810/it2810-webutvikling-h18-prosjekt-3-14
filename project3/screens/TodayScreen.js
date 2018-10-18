@@ -1,43 +1,36 @@
 import React from 'react';
 import Expo, {Pedometer} from "expo";
-import {View, Text, AsyncStorage, StyleSheet, Button, Alert, TouchableHighlight, ActivityIndicator} from 'react-native';
-import { EventRegister } from 'react-native-event-listeners'
+import {ActivityIndicator, Alert, AsyncStorage, Button, StyleSheet, Text, View} from 'react-native';
 
-
-import {Col, Row, Grid} from "react-native-easy-grid";
+import {EventRegister} from 'react-native-event-listeners'
+import {Col, Grid, Row} from "react-native-easy-grid";
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
-import Icon from 'react-native-vector-icons/FontAwesome';
-
-import Helpers from "./../components/Helpers"
-import LogoTitle from '../components/LogoTitle';
 
 import helpers from "../utils/Helpers"
 import colors from '../constants/Colors';
 import layout from '../constants/Layout';
-import EditScreen from "./EditScreen";
+
 
 export default class TodayScreen extends React.Component {
-  state = {
-    isPedometerAvailable: null,
-    pedometerStatusMsg: "checking",
-    pastStepCount: null,
-    userGoal: null,
-    userWeight: null,
-    userHeight: null,
-    isLoading: true,
-  };
-
-  constants = {
-    circularBigSize: width * (3 / 4),
-    circularBigWidth: width / 30,
-  };
-
   constructor(props) {
     super(props);
+    this.state = {
+      isPedometerAvailable: null,
+      pedometerStatusMsg: "checking",
+      pastStepCount: null,
+      userGoal: null,
+      userWeight: null,
+      userHeight: null,
+      isLoading: true,
+    };
+    this.constants = {
+      circularBigSize: width * (3 / 4),
+      circularBigWidth: width / 30,
+    };
   }
 
   componentWillMount() {
-    this.storageUpdateListener = EventRegister.addEventListener('updateAsyncStorage', (data)=> {
+    this.storageUpdateListener = EventRegister.addEventListener('updateAsyncStorage', (data) => {
       console.log(data);
       this.updateFromStorage();
     })
@@ -67,15 +60,14 @@ export default class TodayScreen extends React.Component {
    * @returns {Promise<void>}
    * @private
    */
-  async getStepCount() {
+  getStepCount() {
     // Set dates
     const end = new Date();
     let start = new Date();
     start.setHours(0, 0, 0, 0);   // Set time so that you get all steps from 00:00 today
 
-    await Pedometer.getStepCountAsync(start, end)
-      .then(
-        result => {
+    Pedometer.getStepCountAsync(start, end)
+      .then(result => {
           this.setState({
             isPedometerAvailable: true,
             pastStepCount: result.steps,
@@ -98,33 +90,16 @@ export default class TodayScreen extends React.Component {
    * @private
    */
   async updateFromStorage() {
-    let user;
-    await AsyncStorage.getItem('USER', (err, result) => {
-      user = JSON.parse(result);
-    });
-
-    this.setState({
-      isLoading: false,
-      userGoal: user.goal,
-      userWeight: user.weight,
-      userHeight: user.height
+    AsyncStorage.getItem('USER', (err, result) => {
+      let user = JSON.parse(result);
+      this.setState({
+        isLoading: false,
+        userGoal: user.goal,
+        userWeight: user.weight,
+        userHeight: user.height,
+      })
     });
   };
-
-  async componentDidMount() {
-    try {
-      await this.getStepCount();
-    }
-    catch (e) { // Send an alert with the error message
-      Alert.alert(
-        this.state.pedometerStatusMsg,
-        e.message,
-        [{text: 'OK'}],
-        {cancelable: false}
-      );
-    }
-    this.updateFromStorage();
-  }
 
   render() {
     // Parse states
@@ -133,12 +108,12 @@ export default class TodayScreen extends React.Component {
     const weight = parseInt(this.state.userWeight);
     const pastSteps = parseInt(this.state.pastStepCount);
 
-    const bmi = Helpers.calculateBMI(weight, height);
-    const calories = Helpers.calculateCaloriesBurned(weight, height, pastSteps);
-    const stepGoal = Helpers.calculateGoalProgress(pastSteps, goal); //Step goal is between 0-100 as it is used for the percentage to fill the progress bar
+    const bmi = helpers.calculateBMI(weight, height);
+    const calories = helpers.calculateCaloriesBurned(weight, height, pastSteps);
+    const stepGoal = helpers.calculateGoalProgress(pastSteps, goal); //Step goal is between 0-100 as it is used for the percentage to fill the progress bar
 
     // Display distance with appropriate unit
-    const distance = Helpers.calculateDistance(height, pastSteps);
+    const distance = helpers.calculateDistance(height, pastSteps);
     const distanceDisplayed = distance > 1000 ? distance / 1000 : distance;
     const distanceUnit = distance > 1000 ? "KM" : "Meters";
 
@@ -160,7 +135,7 @@ export default class TodayScreen extends React.Component {
         </View>
       );
     } else {
-      return (
+      return (  // Show normal view
         <View style={styles.container}>
           <Grid>  /* Grid with 2 rows*/
             <Row size={3}>
@@ -173,13 +148,12 @@ export default class TodayScreen extends React.Component {
                 {() => (
                   <View>
                     <Text style={styles.textInsideCircleBig}>
-                      {Helpers.addSpaceBetweenNumber(pastSteps)}
+                      {helpers.addSpaceBetweenNumber(pastSteps)}
                     </Text>
                     <Text style={styles.textInsideCircleSmall}>OF
-                      GOAL: {Helpers.addSpaceBetweenNumber(goal)}</Text>
+                      GOAL: {helpers.addSpaceBetweenNumber(goal)}</Text>
                   </View>
-                )
-                }
+                )}
               </AnimatedCircularProgress>
             </Row>
             <Row size={1}> /* 3 internal columns for separating the 3 different values*/
@@ -209,7 +183,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 25,
     backgroundColor: colors.defaultBackground,
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   loading: {
@@ -238,10 +212,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: width * (1 / 35),
   },
-
-  button: {
-    left: '20%'
-  }
 });
 
 Expo.registerRootComponent(TodayScreen);

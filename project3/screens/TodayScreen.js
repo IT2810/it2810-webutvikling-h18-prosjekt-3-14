@@ -1,6 +1,6 @@
 import React from 'react';
 import Expo, {Pedometer} from "expo";
-import {ActivityIndicator, Alert, AsyncStorage, Button, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, AsyncStorage, StyleSheet, Text, View} from 'react-native';
 
 import {EventRegister} from 'react-native-event-listeners'
 import {Col, Grid, Row} from "react-native-easy-grid";
@@ -30,29 +30,19 @@ export default class TodayScreen extends React.Component {
   }
 
   componentWillMount() {
-    this.storageUpdateListener = EventRegister.addEventListener('updateAsyncStorage', (data) => {
+    this.storageUpdateListener = EventRegister.addEventListener('updateAsyncStorage', (data) => { // Add EventListener
       console.log(data);
       this.updateFromStorage();
     })
   }
 
   componentWillUnmount() {
-    EventRegister.removeEventListener(this.storageUpdateListener)
+    EventRegister.removeEventListener(this.storageUpdateListener); // Unregister EventListener
   }
 
   componentDidMount() {
-    try {
-      this.updateFromStorage();
-      this.getStepCount();
-    }
-    catch (e) { // Send an alert with the error message
-      Alert.alert(
-        this.state.pedometerStatusMsg,
-        e.message,
-        [{text: 'OK'}],
-        {cancelable: false},
-      );
-    }
+    this.updateFromStorage(); // Get the newest update in AsyncStorage
+    this.getStepCount();  // Get users step count from Pedometer
   }
 
   /**
@@ -61,7 +51,7 @@ export default class TodayScreen extends React.Component {
    * @private
    */
   getStepCount() {
-    // Set dates
+    // Set dates to be today
     const end = new Date();
     let start = new Date();
     start.setHours(0, 0, 0, 0);   // Set time so that you get all steps from 00:00 today
@@ -71,17 +61,16 @@ export default class TodayScreen extends React.Component {
           this.setState({
             isPedometerAvailable: true,
             pastStepCount: result.steps,
+            pedometerStatusMsg: 'OK',
           });
         },
         error => {
           this.setState({
             isPedometerAvailable: false,
             pastStepCount: 0,
-            pedometerStatusMsg: "Could not get stepCount",
+            pedometerStatusMsg: String(error),
           });
-          throw new Error(error);
-        }
-      );
+        });
   };
 
   /**
@@ -89,7 +78,7 @@ export default class TodayScreen extends React.Component {
    * @returns {Promise<void>}
    * @private
    */
-  async updateFromStorage() {
+  updateFromStorage() {
     AsyncStorage.getItem('USER', (err, result) => {
       let user = JSON.parse(result);
       this.setState({
@@ -103,6 +92,7 @@ export default class TodayScreen extends React.Component {
 
   render() {
     // Parse states
+    console.log("render");
     const goal = parseInt(this.state.userGoal);
     const height = parseInt(this.state.userHeight);
     const weight = parseInt(this.state.userWeight);
@@ -120,11 +110,7 @@ export default class TodayScreen extends React.Component {
     if (!this.state.isPedometerAvailable) { // Show error screen if there pedometer isn't available
       return (
         <View style={styles.container}>
-          <Text>{this.state.pedometerStatusMsg}</Text>
-          <Button
-            title={"Check for accelerometer"}
-            onPress={this.getStepCount}
-          />
+          <Text style={{top: layout.windowSize.height / 3}}>{this.state.pedometerStatusMsg}</Text>
         </View>
       );
     } else if (this.state.isLoading) {  // Show loading screen while data not collected from AsyncStorage

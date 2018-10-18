@@ -17,25 +17,6 @@ import layout from '../constants/Layout';
 import EditScreen from "./EditScreen";
 
 export default class TodayScreen extends React.Component {
-  static navigationOptions = ({navigation}) => {
-    return {
-      headerTitle: <LogoTitle></LogoTitle>,
-      headerLeft:
-        <TouchableHighlight
-          onPress={() => navigation.navigate("Edit")}
-          style={styles.button}
-          underlayColor={colors.buttonUnderlay}
-          activeOpacity={0.7}
-        >
-          <Icon
-            name={'cog'}
-            color={colors.buttonDefault}
-            size={26}
-          />
-        </TouchableHighlight>
-    };
-  };
-
   state = {
     isPedometerAvailable: null,
     pedometerStatusMsg: "checking",

@@ -1,6 +1,6 @@
 import React from 'react';
 import Expo, {Pedometer} from "expo";
-import {View, Text, AsyncStorage, StyleSheet, Button, Alert, TouchableHighlight} from 'react-native';
+import {View, Text, AsyncStorage, StyleSheet, Button, Alert, TouchableHighlight, ActivityIndicator} from 'react-native';
 
 import {Col, Row, Grid} from "react-native-easy-grid";
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
@@ -38,6 +38,7 @@ export default class TodayScreen extends React.Component {
     userGoal: null,
     userWeight: null,
     userHeight: null,
+    isLoading: true,
   };
 
   constants = {
@@ -65,14 +66,14 @@ export default class TodayScreen extends React.Component {
         result => {
           this.setState({
             isPedometerAvailable: true,
-            pastStepCount: result.steps
+            pastStepCount: result.steps,
           });
         },
         error => {
           this.setState({
             isPedometerAvailable: false,
             pastStepCount: 0,
-            pedometerStatusMsg: "Could not get stepCount"
+            pedometerStatusMsg: "Could not get stepCount",
           });
           throw new Error(error);
         }
@@ -91,6 +92,7 @@ export default class TodayScreen extends React.Component {
     });
 
     this.setState({
+      isLoading: false,
       userGoal: user.goal,
       userWeight: user.weight,
       userHeight: user.height
@@ -133,6 +135,13 @@ export default class TodayScreen extends React.Component {
         <View style={styles.container}>
           <Text>{this.state.pedometerStatusMsg}</Text>
           <Button title={"Check for accelerometer"} onPress={this.getStepCount}/>
+        </View>
+      );
+    } else if (this.state.isLoading) {  // Show loading screen while data not collected from AsyncStorage
+      return (
+        <View styles={styles.loading}>
+          <ActivityIndicator style={{top: layout.windowSize.height / 3}}/>
+          <Text style={{top: layout.windowSize.height / 3, textAlign: 'center'}}>Loading data..</Text>
         </View>
       );
     } else {
@@ -189,6 +198,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
 
+  loading: {
+    alignSelf: 'center',
+    top: '500%'
+  },
+
   textInsideCircleBig: {
     textAlign: 'center',
     fontSize: width * (2 / 15), // Use screen width to get relative sizes
@@ -203,13 +217,11 @@ const styles = StyleSheet.create({
   underTextLarge: {
     textAlign: 'center',
     fontSize: width * (1 / 15),
-    margin: '-1%'
   },
 
   underTextSmall: {
     textAlign: 'center',
     fontSize: width * (1 / 35),
-    margin: '-1%',
   },
 
   button: {

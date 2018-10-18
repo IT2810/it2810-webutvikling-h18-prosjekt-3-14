@@ -134,14 +134,17 @@ export default class TodayScreen extends React.Component {
       return (
         <View style={styles.container}>
           <Text>{this.state.pedometerStatusMsg}</Text>
-          <Button title={"Check for accelerometer"} onPress={this.getStepCount}/>
+          <Button
+            title={"Check for accelerometer"}
+            onPress={this.getStepCount}
+          />
         </View>
       );
     } else if (this.state.isLoading) {  // Show loading screen while data not collected from AsyncStorage
       return (
         <View styles={styles.loading}>
           <ActivityIndicator style={{top: layout.windowSize.height / 3}}/>
-          <Text style={{top: layout.windowSize.height / 3, textAlign: 'center'}}>Loading data..</Text>
+          <Text style={styles.loading}>Loading data..</Text>
         </View>
       );
     } else {
@@ -155,16 +158,15 @@ export default class TodayScreen extends React.Component {
                 fill={stepGoal}
                 tintColor={colors.progressTint}
                 backgroundColor={colors.progressBackground}>
-                {
-                  (fill) => (
-                    <View>
-                      <Text style={styles.textInsideCircleBig}>
-                        {Helpers.addSpaceBetweenNumber(this.state.pastStepCount)}
-                      </Text>
-                      <Text style={styles.textInsideCircleSmall}>OF
-                        GOAL: {Helpers.addSpaceBetweenNumber(parseInt(this.state.userGoal))}</Text>
-                    </View>
-                  )
+                {() => (
+                  <View>
+                    <Text style={styles.textInsideCircleBig}>
+                      {Helpers.addSpaceBetweenNumber(pastSteps)}
+                    </Text>
+                    <Text style={styles.textInsideCircleSmall}>OF
+                      GOAL: {Helpers.addSpaceBetweenNumber(goal)}</Text>
+                  </View>
+                )
                 }
               </AnimatedCircularProgress>
             </Row>
@@ -200,7 +202,8 @@ const styles = StyleSheet.create({
 
   loading: {
     alignSelf: 'center',
-    top: '500%'
+    textAlign: 'center',
+    top: layout.windowSize.height / 3
   },
 
   textInsideCircleBig: {

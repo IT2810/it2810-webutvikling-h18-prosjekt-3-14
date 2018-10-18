@@ -125,8 +125,8 @@ export default class TodayScreen extends React.Component {
 
     // Display distance with appropriate unit
     const distance = Helpers.calculateDistance(height, pastSteps);
-    const distnaceDisplayed = distance > 1000 ? distance / 1000 : distance;
-    const distanceUnit = distance > 1000 ? "KM" : "M";
+    const distanceDisplayed = distance > 1000 ? distance / 1000 : distance;
+    const distanceUnit = distance > 1000 ? "KM" : "Meters";
 
     if (!this.state.isPedometerAvailable) { // Show error screen if there pedometer isn't available
       return (
@@ -161,7 +161,7 @@ export default class TodayScreen extends React.Component {
             </Row>
             <Row size={1}> /* 3 internal columns for separating the 3 different values*/
               <Col>
-                <Text style={styles.underTextLarge}>{(distnaceDisplayed).toFixed(2)}</Text>
+                <Text style={styles.underTextLarge}>{(distanceDisplayed).toFixed(2)}</Text>
                 <Text style={styles.underTextSmall}>{distanceUnit}</Text>
               </Col>
               <Col>

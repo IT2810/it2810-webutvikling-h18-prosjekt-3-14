@@ -1,6 +1,8 @@
 import React from 'react';
 import Expo from "expo";
 import { View, Button, AsyncStorage, StyleSheet, Text, TextInput, Picker, ImageBackground, TouchableOpacity } from 'react-native';
+import { EventRegister } from 'react-native-event-listeners'
+
  
 export default class EditScreen extends React.Component {
     constructor(props){
@@ -110,7 +112,14 @@ export default class EditScreen extends React.Component {
         goal: this.state.goal,
       };
       await AsyncStorage.mergeItem('USER', JSON.stringify(USER_object));
-      this.props.navigation.navigate('App');
+
+      EventRegister.emit('updateAsyncStorage', 'Updated storages');
+      try {
+        this.props.navigation.pop();
+      } catch (e) {
+        this.props.navigation.navigate('App');
+      }
+
     };
 
     //Function getting user info from AsyncStorage and connecting it to state.

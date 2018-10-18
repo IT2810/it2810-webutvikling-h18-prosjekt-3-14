@@ -1,6 +1,8 @@
 import React from 'react';
 import Expo, {Pedometer} from "expo";
 import {View, Text, AsyncStorage, StyleSheet, Button, Alert, TouchableHighlight, ActivityIndicator} from 'react-native';
+import { EventRegister } from 'react-native-event-listeners'
+
 
 import {Col, Row, Grid} from "react-native-easy-grid";
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
@@ -8,8 +10,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Helpers from "./../components/Helpers"
 import LogoTitle from '../components/LogoTitle';
+
+import helpers from "../utils/Helpers"
 import colors from '../constants/Colors';
 import layout from '../constants/Layout';
+import EditScreen from "./EditScreen";
 
 export default class TodayScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -48,6 +53,32 @@ export default class TodayScreen extends React.Component {
 
   constructor(props) {
     super(props);
+  }
+
+  componentWillMount() {
+    this.storageUpdateListener = EventRegister.addEventListener('updateAsyncStorage', (data)=> {
+      console.log(data);
+      this.updateFromStorage();
+    })
+  }
+
+  componentWillUnmount() {
+    EventRegister.removeEventListener(this.storageUpdateListener)
+  }
+
+  componentDidMount() {
+    try {
+      this.updateFromStorage();
+      this.getStepCount();
+    }
+    catch (e) { // Send an alert with the error message
+      Alert.alert(
+        this.state.pedometerStatusMsg,
+        e.message,
+        [{text: 'OK'}],
+        {cancelable: false},
+      );
+    }
   }
 
   /**

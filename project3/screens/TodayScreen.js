@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Helpers from "./../components/Helpers"
 import LogoTitle from '../components/LogoTitle';
 import colors from '../constants/Colors';
-import layout from '../constants/Layout'
+import layout from '../constants/Layout';
 
 export default class TodayScreen extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -25,7 +25,7 @@ export default class TodayScreen extends React.Component {
           <Icon
             name={'cog'}
             color={colors.buttonDefault}
-            size={30}
+            size={26}
           />
         </TouchableHighlight>
     };
@@ -218,7 +218,3 @@ const styles = StyleSheet.create({
 });
 
 Expo.registerRootComponent(TodayScreen);
-
- 
-
-  

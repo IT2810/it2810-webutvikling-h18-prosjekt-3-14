@@ -4,33 +4,96 @@ import PureChart from 'react-native-pure-chart';
 import colors from '../constants/Colors';
 import layout from "../constants/Layout";
 import {Col, Grid, Row} from "react-native-easy-grid";
+import {EventRegister} from "react-native-event-listeners";
+import {Pedometer} from "expo";
 
 
 export default class WeekScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            sampleData: [
-                {
-                    data: [
-                        {x: 'Mon', y: 9124},
-                        {x: 'Tue', y: 8042},
-                        {x: 'Wed', y: 12004},
-                        {x: 'Thu', y: 5421},
-                        {x: 'Fri', y: 6621},
-                        {x: 'Sat', y: 8525},
-                        {x: 'Sun', y: 11158}
-                    ],
-                    color: colors.progressBackground
-                }]};
+            weekData: null
+        };
     }
+
+    componentWillMount() {
+        this.storageUpdateListener = EventRegister.addEventListener('updateAsyncStorage', () => { // Add EventListener
+            this.updateFromStorage();
+        })
+    }
+
+    componentWillUnmount() {
+        EventRegister.removeEventListener(this.storageUpdateListener); // Unregister EventListener
+        this.unsubscribe();
+    }
+
+    componentDidMount() {
+        this.getStepCount();  // Get users step count from Pedometer
+    }
+
+
+    /**
+     * Get the steps from this week
+     * @returns {Promise<void>}
+     * @private
+     */
+    getStepCount() {
+        // Gets the steps for everyday from monday until today
+        let data = [
+            {x: 'Mon', y: 0},
+            {x: 'Tue', y: 0},
+            {x: 'Wed', y: 0},
+            {x: 'Thu', y: 0},
+            {x: 'Fri', y: 0},
+            {x: 'Sat', y: 0},
+            {x: 'Sun', y: 0}
+        ];
+        let today = new Date();
+        // Right shift days to have monday as 0th day
+        let today_day = today.getDay() + -1;
+        if (today_day < 0) today_day = 6;
+
+        for (let day = 0; day <= today_day; day++) {
+            let from = new Date();
+            from.setDate(from.getDate() - (today_day - day));
+            let to = new Date();
+            to.setDate(to.getDate() - (today_day - day));
+            console.log(from.getDate());
+
+            from.setHours(0, 0, 0, 0);
+            if (day !== today_day) {
+                to.setHours(23, 59, 59, 0)
+            }
+
+            Pedometer.getStepCountAsync(from, to)
+                .then(result => {
+                        data[day]["y"] = result.steps;
+                        this.setState({
+                            weekData: [
+                                {
+                                    data: data,
+                                    color: colors.progressBackground
+                                }],
+                            isPedometerAvailable: true,
+                            pedometerStatusMsg: 'OK',
+                        });
+                    },
+                    error => {
+                        this.setState({
+                            isPedometerAvailable: false,
+                            pedometerStatusMsg: String(error),
+                        });
+                    });
+        }
+    };
+
 
     render() {
         return (
             <View style={styles.container}>
                 <Grid>{/* Grid with 2 rows*/}
                     <Row size={3}>
-                        <PureChart data={this.state.sampleData}
+                        <PureChart data={this.state.weekData}
                                    type='bar'
                                    showEvenNumberXaxisLabel={false}
                                    height={200}

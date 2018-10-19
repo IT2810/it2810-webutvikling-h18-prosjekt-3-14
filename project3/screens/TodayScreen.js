@@ -23,6 +23,7 @@ export default class TodayScreen extends React.Component {
       userWeight: null,
       userHeight: null,
       isLoading: true,
+      user: null
     };
     this.constants = {
       circularBigSize: width * (3 / 4),
@@ -62,13 +63,15 @@ export default class TodayScreen extends React.Component {
     const end = new Date();
     let start = new Date();
     start.setHours(0, 0, 0, 0);   // Set time so that you get all steps from 00:00 today
-
     Pedometer.getStepCountAsync(start, end)
       .then(result => {
           this.setState({
             isPedometerAvailable: true,
             pastStepCount: result.steps,
             pedometerStatusMsg: 'OK',
+          });
+          AsyncStorage.setItem('USER', JSON.stringify(this.state.user), () => {
+            AsyncStorage.mergeItem('USER', JSON.stringify({steps: result.steps}));
           });
         },
         error => {
@@ -98,6 +101,7 @@ export default class TodayScreen extends React.Component {
         userGoal: user.goal,
         userWeight: user.weight,
         userHeight: user.height,
+        user: user,
       })
     });
   };

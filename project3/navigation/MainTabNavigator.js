@@ -17,126 +17,138 @@ import colors from '../constants/Colors';
 
 
 const TodayStack = createStackNavigator({
-        Today: {
-            screen: TodayScreen,
-            title: <LogoTitle/>,
-            navigationOptions: ({navigation}) => ({
-                title: "Today",
-                headerTitle: <LogoTitle/>,
-                headerLeft:
-                    <TouchableHighlight
-                        onPress={() => {
-                            navigation.navigate('Edit')
-                        }}
-                        style={styles.button}
-                        underlayColor={colors.buttonUnderlay}
-                        activeOpacity={0.5}
-                    >
-                        <Icon
-                            name={'gear'}
-                            color={colors.buttonDefault}
-                            size={35}
-                        />
-                    </TouchableHighlight>
-            }),
-        },
-        Edit: {
-            screen: EditScreen,
-        },
+    Today: {
+      screen: TodayScreen,
+      title: <LogoTitle/>,
+      navigationOptions: ({navigation}) => ({
+        title: "Today",
+        headerTitle: <LogoTitle/>,
+        headerLeft:
+          <TouchableHighlight
+            onPress={() => {
+              navigation.navigate('Edit')
+            }}
+            style={styles.button}
+            underlayColor={colors.buttonUnderlay}
+            activeOpacity={0.5}
+          >
+            <Icon
+              name={'gear'}
+              color={colors.buttonDefault}
+              size={35}
+            />
+          </TouchableHighlight>
+      }),
     },
-    {
-        initialRouteName: "Today"
-    });
+    Edit: {
+      screen: EditScreen,
+    },
+  },
+  {
+    initialRouteName: "Today"
+  });
 
 TodayStack.navigationOptions = {
-    tabBarLabel: 'Today',
-    tabBarIcon: ({focused}) => (
-        <TabBarIcon
-            focused={focused}
-            name={
-                Platform.OS === 'ios'
-                    ? `ios-home${focused ? '' : '-outline'}`
-                    : 'md-home'
-            }
-        />
-    ),
+  tabBarLabel: 'Today',
+  tabBarIcon: ({focused}) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-home${focused ? '' : '-outline'}`
+          : 'md-home'
+      }
+    />
+  ),
 };
 
 const WeekStack = createStackNavigator({
     Week: {
-        screen: WeekScreen,
-        title: <LogoTitle/>,
-        navigationOptions: ({navigation}) => ({
-            title: "Week",
-            headerTitle: <LogoTitle/>,
-            headerLeft:
-                <TouchableHighlight
-                    onPress={() => {
-                        navigation.navigate('Edit')
-                    }}
-                    style={styles.button}
-                    underlayColor={colors.buttonUnderlay}
-                    activeOpacity={0.5}
-                >
-                    <Icon
-                        name={'gear'}
-                        color={colors.buttonDefault}
-                        size={35}
-                    />
-                </TouchableHighlight>
-        }),
+      screen: WeekScreen,
+      title: <LogoTitle/>,
+      navigationOptions: ({navigation}) => ({
+        title: "Week",
+        headerTitle: <LogoTitle/>,
+        headerLeft:
+          <TouchableHighlight
+            onPress={() => {
+              navigation.navigate('Edit')
+            }}
+            style={styles.button}
+            underlayColor={colors.buttonUnderlay}
+            activeOpacity={0.5}
+          >
+            <Icon
+              name={'gear'}
+              color={colors.buttonDefault}
+              size={35}
+            />
+          </TouchableHighlight>
+      })
+    },
+    Edit: {
+      screen: EditScreen,
     }
-});
+  },
+  {
+    initialRouteName: "Week"
+  });
+
 
 WeekStack.navigationOptions = {
-    tabBarLabel: 'Week',
-    tabBarIcon: ({focused}) => (
-        <TabBarIcon
-            focused={focused}
-            name={Platform.OS === 'ios'
-                ? `ios-stats${focused ? '' : '-outline'}`
-                : 'md-stats'}
-        />
-    ),
+  tabBarLabel: 'Week',
+  tabBarIcon: ({focused}) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios'
+        ? `ios-stats${focused ? '' : '-outline'}`
+        : 'md-stats'}
+    />
+  ),
 };
 
 const ProfileStack = createStackNavigator({
     Profile: {
-        screen: ProfileScreen,
-        title: <LogoTitle/>,
-        navigationOptions: ({navigation}) => ({
-            title: "Profile",
-            headerTitle: <LogoTitle/>,
-            headerLeft:
-                <TouchableHighlight
-                    onPress={() => {
-                        navigation.navigate('Edit')
-                    }}
-                    style={styles.button}
-                    underlayColor={colors.buttonUnderlay}
-                    activeOpacity={0.5}
-                >
-                    <Icon
-                        name={'gear'}
-                        color={colors.buttonDefault}
-                        size={35}
-                    />
-                </TouchableHighlight>
-        }),
-
+      screen: ProfileScreen,
+      title: <LogoTitle/>,
+      navigationOptions: ({navigation}) => ({
+        title: "Profile",
+        headerTitle: <LogoTitle/>,
+        headerLeft:
+          <TouchableHighlight
+            onPress={() => {
+              navigation.navigate('Edit')
+            }}
+            style={styles.button}
+            underlayColor={colors.buttonUnderlay}
+            activeOpacity={0.5}
+          >
+            <Icon
+              name={'gear'}
+              color={colors.buttonDefault}
+              size={35}
+            />
+          </TouchableHighlight>
+      })
+    },
+    Edit: {
+      screen: EditScreen,
     }
-});
+  },
+  {
+    initialRouteName: "Profile"
+  });
 
 ProfileStack.navigationOptions = {
-    tabBarLabel: 'Profile',
-    tabBarIcon: ({focused}) => (
-        <TabBarIcon
-            focused={focused}
-            name={Platform.OS === 'ios'
-                ? `ios-person${focused ? ''
-                    : '-outline'}` : 'md-person'}
-        />
-    ),
+  tabBarLabel: 'Profile',
+  tabBarIcon: ({focused}) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios'
+        ? `ios-person${focused ? ''
+          : '-outline'}` : 'md-person'}
+    />
+  ),
 };
 
 const PlannerStack = createStackNavigator({
@@ -144,7 +156,7 @@ const PlannerStack = createStackNavigator({
     screen: PlannerScreen,
     title: "Planner",
     headerTitle: <LogoTitle/>,
-    navigationOptions:({navigation}) => ({
+    navigationOptions: ({navigation}) => ({
       title: "Planner",
       headerTitle: <LogoTitle/>,
     }),
@@ -173,7 +185,7 @@ export default createBottomTabNavigator({
 
 
 const styles = StyleSheet.create({
-    button: {
-        left: "5%"
-    },
+  button: {
+    left: "5%"
+  },
 });

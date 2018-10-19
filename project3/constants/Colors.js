@@ -3,7 +3,7 @@ const colors = {
   tabIconDefault: '#ccc',
   tabIconSelected: '#2f95dc',
   tabBar: '#fefefe',
-  errorBackground: 'red',
+  errorBackground: '#ff0000',
   errorText: '#fff',
   warningBackground: '#EAEB5E',
   warningText: '#666804',
@@ -13,7 +13,8 @@ const colors = {
   buttonUnderlay: '#fff',
   progressTint: '#00e0ff',
   progressBackground: '#3d5875',
-  defaultBackground: '#fff',
+  defaultBackground: '#ffffff',
+  fontColor: '#000000'
 };
 
 export default colors;

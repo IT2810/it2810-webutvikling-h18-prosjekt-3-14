@@ -30,8 +30,7 @@ export default class TodayScreen extends React.Component {
   }
 
   componentWillMount() {
-    this.storageUpdateListener = EventRegister.addEventListener('updateAsyncStorage', (data) => { // Add EventListener
-      console.log(data);
+    this.storageUpdateListener = EventRegister.addEventListener('updateAsyncStorage', () => { // Add EventListener
       this.updateFromStorage();
     })
   }
@@ -91,8 +90,8 @@ export default class TodayScreen extends React.Component {
   };
 
   render() {
-    // Parse states
     console.log("render");
+    // Parse states
     const goal = parseInt(this.state.userGoal);
     const height = parseInt(this.state.userHeight);
     const weight = parseInt(this.state.userWeight);
@@ -110,7 +109,7 @@ export default class TodayScreen extends React.Component {
     if (!this.state.isPedometerAvailable) { // Show error screen if there pedometer isn't available
       return (
         <View style={styles.container}>
-          <Text style={{top: layout.windowSize.height / 3}}>{this.state.pedometerStatusMsg}</Text>
+          <Text style={styles.errorMsg}>{this.state.pedometerStatusMsg}</Text>
         </View>
       );
     } else if (this.state.isLoading) {  // Show loading screen while data not collected from AsyncStorage
@@ -133,11 +132,8 @@ export default class TodayScreen extends React.Component {
                 backgroundColor={colors.progressBackground}>
                 {() => (
                   <View>
-                    <Text style={styles.textInsideCircleBig}>
-                      {helpers.addSpaceBetweenNumber(pastSteps)}
-                    </Text>
-                    <Text style={styles.textInsideCircleSmall}>OF
-                      GOAL: {helpers.addSpaceBetweenNumber(goal)}</Text>
+                    <Text style={styles.textInsideCircleBig}>{helpers.addSpaceBetweenNumber(pastSteps)}</Text>
+                    <Text style={styles.textInsideCircleSmall}>OF GOAL: {helpers.addSpaceBetweenNumber(goal)}</Text>
                   </View>
                 )}
               </AnimatedCircularProgress>
@@ -163,7 +159,10 @@ export default class TodayScreen extends React.Component {
   }
 }
 
-const width = layout.windowSize.width; //Get sizes of the users screen
+const width = layout.windowSize.width;   //Get width of the users screen
+const height = layout.windowSize.height; //Get height of the users screen
+
+// All styles for TodayScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -173,31 +172,41 @@ const styles = StyleSheet.create({
   },
 
   loading: {
+    color: colors.fontColor,
     alignSelf: 'center',
     textAlign: 'center',
-    top: layout.windowSize.height / 3
+    top: height / 3
   },
 
   textInsideCircleBig: {
+    color: colors.fontColor,
     textAlign: 'center',
     fontSize: width * (2 / 15), // Use screen width to get relative sizes
   },
 
   textInsideCircleSmall: {
+    color: colors.fontColor,
     textAlign: 'center',
     fontSize: width * (1 / 35),
 
   },
 
   underTextLarge: {
+    color: colors.fontColor,
     textAlign: 'center',
     fontSize: width * (1 / 15),
   },
 
   underTextSmall: {
+    color: colors.fontColor,
     textAlign: 'center',
     fontSize: width * (1 / 35),
   },
+
+  errorMsg: {
+    color: colors.fontColor,
+    top: height / 3,
+  }
 });
 
 Expo.registerRootComponent(TodayScreen);

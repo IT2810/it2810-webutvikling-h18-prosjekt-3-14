@@ -1,6 +1,6 @@
 import React from 'react';
 import {Platform, StyleSheet, TouchableHighlight} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/EvilIcons';
 
 import {createBottomTabNavigator, createStackNavigator} from 'react-navigation';
 
@@ -24,18 +24,20 @@ const TodayStack = createStackNavigator({
         headerTitle: <LogoTitle/>,
         headerLeft:
           <TouchableHighlight
-            onPress={() => navigation.navigate('Edit')}
+            onPress={() => {
+              navigation.navigate('Edit')
+            }}
             style={styles.button}
             underlayColor={colors.buttonUnderlay}
-            activeOpacity={0.7}
+            activeOpacity={0.5}
           >
             <Icon
-              name={'cog'}
+              name={'gear'}
               color={colors.buttonDefault}
-              size={30}
+              size={35}
             />
           </TouchableHighlight>
-      })
+      }),
     },
     Edit: {
       screen: EditScreen,
@@ -46,7 +48,6 @@ const TodayStack = createStackNavigator({
   });
 
 TodayStack.navigationOptions = {
-  headerTitle: "Hello",
   tabBarLabel: 'Today',
   tabBarIcon: ({focused}) => (
     <TabBarIcon
@@ -69,7 +70,9 @@ WeekStack.navigationOptions = {
   tabBarIcon: ({focused}) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? `ios-stats${focused ? '' : '-outline'}` : 'md-stats'}
+      name={Platform.OS === 'ios'
+        ? `ios-stats${focused ? '' : '-outline'}`
+        : 'md-stats'}
     />
   ),
 };
@@ -83,7 +86,9 @@ ProfileStack.navigationOptions = {
   tabBarIcon: ({focused}) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? `ios-person${focused ? '' : '-outline'}` : 'md-person'}
+      name={Platform.OS === 'ios'
+        ? `ios-person${focused ? ''
+        : '-outline'}` : 'md-person'}
     />
   ),
 };
@@ -97,6 +102,6 @@ export default createBottomTabNavigator({
 
 const styles = StyleSheet.create({
   button: {
-    left: '25%',
+    left: '25%'
   },
 });

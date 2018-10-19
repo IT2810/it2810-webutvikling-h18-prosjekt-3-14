@@ -20,7 +20,7 @@ export default class EditScreen extends React.Component {
     };
     await AsyncStorage.mergeItem('USER', JSON.stringify(USER_object));
 
-    EventRegister.emit('updateAsyncStorage', 'Updated storages');
+    EventRegister.emit('updateAsyncStorage');
     try {
       this.props.navigation.pop();
     } catch (e) {
@@ -31,7 +31,7 @@ export default class EditScreen extends React.Component {
   //Function getting user info from AsyncStorage and connecting it to state.
   _getUserDate = async () => {
     await AsyncStorage.getItem('USER', (err, result) => {
-      let user = JSON.parse(result)
+      let user = JSON.parse(result);
       this.setState({
         name: user.name,
         age: user.age,
@@ -41,7 +41,7 @@ export default class EditScreen extends React.Component {
         goal: user.goal
       });
     });
-  }
+  };
 
   constructor(props) {
     super(props);

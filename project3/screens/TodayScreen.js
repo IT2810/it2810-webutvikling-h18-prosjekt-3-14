@@ -15,6 +15,7 @@ export default class TodayScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentStepCount: 0,
       isPedometerAvailable: null,
       pedometerStatusMsg: "checking",
       pastStepCount: null,
@@ -37,6 +38,7 @@ export default class TodayScreen extends React.Component {
 
   componentWillUnmount() {
     EventRegister.removeEventListener(this.storageUpdateListener); // Unregister EventListener
+    this.unsubscribe();
   }
 
   componentDidMount() {
@@ -50,6 +52,12 @@ export default class TodayScreen extends React.Component {
    * @private
    */
   getStepCount() {
+    this._subscription = Pedometer.watchStepCount(result => {
+      this.setState({
+        currentStepCount: result.steps
+      });
+    });
+
     // Set dates to be today
     const end = new Date();
     let start = new Date();
@@ -71,6 +79,11 @@ export default class TodayScreen extends React.Component {
           });
         });
   };
+
+  unsubscribe() {
+    this._subscription && this._subscription.remove();
+    this._subscription = null;
+  }
 
   /**
    * Gets user details from async storage and updates states
@@ -95,13 +108,15 @@ export default class TodayScreen extends React.Component {
     const height = parseInt(this.state.userHeight);
     const weight = parseInt(this.state.userWeight);
     const pastSteps = parseInt(this.state.pastStepCount);
+    const currentSteps = parseInt(this.state.currentStepCount);
+    let totaltSteps = pastSteps + currentSteps;
 
     const bmi = helpers.calculateBMI(weight, height);
-    const calories = helpers.calculateCaloriesBurned(weight, height, pastSteps);
-    const stepGoal = helpers.calculateGoalProgress(pastSteps, goal); //Step goal is between 0-100 as it is used for the percentage to fill the progress bar
+    const calories = helpers.calculateCaloriesBurned(weight, height, totaltSteps);
+    const stepGoal = helpers.calculateGoalProgress(totaltSteps, goal); //Step goal is between 0-100 as it is used for the percentage to fill the progress bar
 
     // Display distance with appropriate unit
-    const distance = helpers.calculateDistance(height, pastSteps);
+    const distance = helpers.calculateDistance(height, totaltSteps);
     const distanceDisplayed = distance > 1000 ? distance / 1000 : distance;
     const distanceUnit = distance > 1000 ? "KM" : "Meters";
 
@@ -131,7 +146,7 @@ export default class TodayScreen extends React.Component {
                 backgroundColor={colors.progressBackground}>
                 {() => (
                   <View>
-                    <Text style={styles.textInsideCircleBig}>{helpers.addSpaceBetweenNumber(pastSteps)}</Text>
+                    <Text style={styles.textInsideCircleBig}>{helpers.addSpaceBetweenNumber(totaltSteps)}</Text>
                     <Text style={styles.textInsideCircleSmall}>OF GOAL: {helpers.addSpaceBetweenNumber(goal)}</Text>
                   </View>
                 )}

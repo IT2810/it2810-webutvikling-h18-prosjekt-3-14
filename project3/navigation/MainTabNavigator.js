@@ -66,7 +66,7 @@ const WeekStack = createStackNavigator({
         screen: WeekScreen,
         title: <LogoTitle/>,
         navigationOptions: ({navigation}) => ({
-            title: "Today",
+            title: "Week",
             headerTitle: <LogoTitle/>,
             headerLeft:
                 <TouchableHighlight
@@ -100,7 +100,30 @@ WeekStack.navigationOptions = {
 };
 
 const ProfileStack = createStackNavigator({
-    Profile: ProfileScreen,
+    Profile: {
+        screen: ProfileScreen,
+        title: <LogoTitle/>,
+        navigationOptions: ({navigation}) => ({
+            title: "Profile",
+            headerTitle: <LogoTitle/>,
+            headerLeft:
+                <TouchableHighlight
+                    onPress={() => {
+                        navigation.navigate('Edit')
+                    }}
+                    style={styles.button}
+                    underlayColor={colors.buttonUnderlay}
+                    activeOpacity={0.5}
+                >
+                    <Icon
+                        name={'gear'}
+                        color={colors.buttonDefault}
+                        size={35}
+                    />
+                </TouchableHighlight>
+        }),
+
+    }
 });
 
 ProfileStack.navigationOptions = {

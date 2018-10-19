@@ -20,17 +20,6 @@ export default class WeekScreen extends React.Component {
             };
     }
 
-    componentWillMount() {
-        this.storageUpdateListener = EventRegister.addEventListener('updateAsyncStorage', () => { // Add EventListener
-            this.updateFromStorage();
-        })
-    }
-
-    componentWillUnmount() {
-        EventRegister.removeEventListener(this.storageUpdateListener); // Unregister EventListener
-        this.unsubscribe();
-    }
-
     componentDidMount() {
         this.getStepCount();  // Get users step count from Pedometer
     }
@@ -42,7 +31,6 @@ export default class WeekScreen extends React.Component {
      * @private
      */
     getStepCount() {
-        // Gets the steps for everyday from monday until today
         let data = [
             {x: 'Mon', y: 0},
             {x: 'Tue', y: 0},
@@ -57,6 +45,7 @@ export default class WeekScreen extends React.Component {
         let today_day = today.getDay() + -1;
         if (today_day < 0) today_day = 6;
 
+        // Iterate over all days from monday until today
         for (let day = 0; day <= today_day; day++) {
             let from = new Date();
             from.setDate(from.getDate() - (today_day - day));
@@ -65,10 +54,12 @@ export default class WeekScreen extends React.Component {
             console.log(from.getDate());
 
             from.setHours(0, 0, 0, 0);
+            // If this is the current day, use the current time. If not, use the whole day.
             if (day !== today_day) {
                 to.setHours(23, 59, 59, 0)
             }
 
+            // Gets the steps from this day and updates the state
             Pedometer.getStepCountAsync(from, to)
                 .then(result => {
                         data[day]["y"] = result.steps;

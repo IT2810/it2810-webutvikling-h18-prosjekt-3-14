@@ -10,7 +10,7 @@ const CoolButton = ({text, onPress}) => (
     <TouchableHighlight
       style={styles.button}
       onPress={onPress}
-      underlayColor={'fff'}
+      underlayColor={'#fff'}
       activeOpacity={0.5}
     >
       <Text>{text}</Text>
@@ -25,8 +25,7 @@ const styles = StyleSheet.create({
     margin: '3%',
     borderWidth: 0.5,
     borderColor: 'black',
-    color: 'red',
-    backgroundColor: 'fff',
+    backgroundColor: '#fff',
     width: layout.windowSize.width / 2,
   },
   text: {

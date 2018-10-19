@@ -94,18 +94,14 @@ export default class PlannerScreen extends React.Component {
         <TextInput
           style={styles.input}
           onChangeText={(text) => this.setState({title: text})}
-          placeholder="79,0 (kg)"
           value={this.state.title}
-          keyboardType="numeric"
           returnKeyType="done"
         />
         <Text>Time</Text>
         <TextInput
           style={styles.input}
           onChangeText={(text) => this.setState({time: text})}
-          placeholder="79,0 (kg)"
           value={this.state.time}
-          keyboardType="numeric"
           returnKeyType="done"
         />
 

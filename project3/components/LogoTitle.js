@@ -7,7 +7,7 @@ class LogoTitle extends Component {
             <View style={styles.imageview}>
                 <Image
                     source={require('../walktrue.jpg')}
-                    style={{width: "70%", height: 25}}
+                    style={{width: "50%", height: 25, resizeMode: 'contain',}}
                 />
             </View>
         );
@@ -16,8 +16,7 @@ class LogoTitle extends Component {
 
 const styles = StyleSheet.create({
     imageview: {
-        width: "95%",
-        position: "absolute",
+        width: "100%",
         alignItems: "center",
     }
 });

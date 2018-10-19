@@ -22,6 +22,7 @@
     "react-native-easy-grid": "^0.2.0",
     "react-native-elements": "^0.19.1",
     "react-native-event-listeners": "^1.0.3",
+    "react-navigation": "^2.16.0",
     "react-native-pure-chart": "^0.0.24"
   },
   "devDependencies": {

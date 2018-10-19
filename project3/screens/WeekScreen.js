@@ -52,6 +52,20 @@ export default class WeekScreen extends React.Component {
                             <Text style={styles.underTextSmall}>Unit</Text>
                         </Col>
                     </Row>
+                    <Row size={1}>{/* 3 internal columns for separating the 3 different values*/}
+                        <Col>
+                            <Text style={styles.underTextLarge}>Avg</Text>
+                            <Text style={styles.underTextSmall}>Unit</Text>
+                        </Col>
+                        <Col>
+                            <Text style={styles.underTextLarge}>Min</Text>
+                            <Text style={styles.underTextSmall}>Unit</Text>
+                        </Col>
+                        <Col>
+                            <Text style={styles.underTextLarge}>Max</Text>
+                            <Text style={styles.underTextSmall}>Unit</Text>
+                        </Col>
+                    </Row>
                 </Grid>
             </View>
         );

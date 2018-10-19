@@ -1,6 +1,6 @@
 import React from 'react';
 import Expo from "expo";
-import {AsyncStorage, StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage, StyleSheet, Text, View, TextInput} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {EventRegister} from 'react-native-event-listeners'
 
@@ -17,6 +17,8 @@ export default class PlannerScreen extends React.Component {
     super(props);
     this.state = {
       selectedDate: new Date(),
+      title: "",
+      time: "",
     }
   }
 
@@ -29,13 +31,8 @@ export default class PlannerScreen extends React.Component {
 
   async componentWillMount() {
     this.doneUpdating = EventRegister.addEventListener('doneUpdating', async () => { // Add EventListener
-      await this.sleep(3000);
       this.render();
     })
-  }
-
-  sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   makeid(length) {
@@ -61,12 +58,13 @@ export default class PlannerScreen extends React.Component {
     data.events.push(
       {
         event: {
-          title: this.makeid(4),
-          time: this.makeid(4),
+          title: this.state.title,
+          time: this.state.time,
         }
       });
     console.log("Data in addEvent - after push", data);
     AsyncStorage.setItem(dateString, JSON.stringify(data));
+    EventRegister.emit('updateEventList');
   };
 
   render() {
@@ -79,7 +77,7 @@ export default class PlannerScreen extends React.Component {
             this.setState({
               selectedDate: new Date(day.dateString),
             });
-            EventRegister.emit('updateEventList');
+            EventRegister.emit('updateEventList', new Date(day.dateString));
           }}
           showWeekNumbers={true}
         />
@@ -88,6 +86,24 @@ export default class PlannerScreen extends React.Component {
         <CoolButton text={'Create new Event'} onPress={() => {
           this.addEvent(selectedDate);
         }}/>
+        <Text>Title</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => this.setState({title: text})}
+          placeholder="79,0 (kg)"
+          value={this.state.title}
+          keyboardType="numeric"
+          returnKeyType="done"
+        />
+        <Text>Time</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => this.setState({time: text})}
+          placeholder="79,0 (kg)"
+          value={this.state.time}
+          keyboardType="numeric"
+          returnKeyType="done"
+        />
 
         <EventList date={selectedDate}/>
       </View>
@@ -106,21 +122,22 @@ const styles = StyleSheet.create({
   calendar: {
     width: window.width,
   },
-  testSd1: {
-    width: window.width,
-    height: '100%',
-    backgroundColor: 'green',
+  input: {
+    height: "3.7%",
+    width: "85%",
+    textAlign: "center",
+    fontSize: 14,
+    borderLeftWidth: 1,
+    borderTopWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 7,
+    borderBottomRightRadius: 50,
+    borderBottomLeftRadius: 7,
+    borderColor: "dodgerblue",
+    backgroundColor: "white",
   },
-  testSd2: {
-    width: window.width,
-    height: '100%',
-    backgroundColor: 'red',
-  },
-  testSd3: {
-    width: window.width,
-    height: '100%',
-    backgroundColor: 'yellow',
-  }
 });
 
 Expo.registerRootComponent(PlannerScreen);

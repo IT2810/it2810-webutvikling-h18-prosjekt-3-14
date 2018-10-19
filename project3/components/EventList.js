@@ -27,15 +27,11 @@ export default class EventList extends React.Component {
   }
 
   componentWillMount() {
-    this.updateEventList = EventRegister.addEventListener('updateEventList', async () => { // Add EventListener
-      this.update();
+    this.updateEventList = EventRegister.addEventListener('updateEventList', async (date) => { // Add EventListener
+      this.getEvents(date);
     })
   }
-
-  async update() {
-    await this.getEvents(this.props.date);
-  }
-
+  
   eventsToComponents(data) {
     if (data === undefined || data === null) {
       this.setState({
@@ -58,7 +54,6 @@ export default class EventList extends React.Component {
     this.setState({
       events: arrayOfEvents,
     });
-    console.log(this.state.events);
     EventRegister.emit('doneUpdating');
     // return arrayOfEvents.map(function (data, i) {
     //   return (
@@ -74,8 +69,6 @@ export default class EventList extends React.Component {
   }
 
   render() {
-    console.log("EventList");
-    console.log(this.state.events);
     let events = this.state.events;
     if (events === null) {
       return (
@@ -93,8 +86,6 @@ export default class EventList extends React.Component {
 
     return (
       <ScrollView>
-        <Text>Hehehe</Text>
-        <CalendarEvent title={"bebe"}/>
         {data}
       </ScrollView>
     );

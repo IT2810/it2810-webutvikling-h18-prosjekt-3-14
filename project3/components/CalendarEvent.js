@@ -8,10 +8,10 @@ const CalendarEvent = ({title, time}) => (
   <View style={styles.event}>
     <Row>
       <Col>
-        <Text style={styles.largeText}>{title}</Text>
+        <Text style={styles.smallText}>{time}</Text>
       </Col>
       <Col>
-        <Text style={styles.small}>{time}</Text>
+        <Text style={styles.largeText}>{title}</Text>
       </Col>
     </Row>
   </View>
@@ -27,10 +27,12 @@ const styles = StyleSheet.create({
     alignItems: 'Left',
   },
   largeText: {
+    textAlign: 'left',
     fontSize: 30,
     color: 'black',
   },
   smallText: {
+    textAlign: 'left',
     fontSize: 10,
     color: 'black',
   }

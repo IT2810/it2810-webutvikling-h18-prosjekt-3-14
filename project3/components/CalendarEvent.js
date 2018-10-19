@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
     width: layout.windowSize.width,
     height: layout.windowSize.height / 10,
     backgroundColor: 'white',
-    alignItems: 'Left',
   },
   largeText: {
     fontSize: 30,

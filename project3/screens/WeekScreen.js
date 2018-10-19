@@ -16,7 +16,7 @@ export default class WeekScreen extends React.Component {
             weekData: [
                 {
                     data: null,
-                    color: colors.progressBackground
+                    color: colors.progressTint
                 }],
             daysToLoad: null,
             loadedDays: null,
@@ -89,7 +89,7 @@ export default class WeekScreen extends React.Component {
                             weekData: [
                                 {
                                     data: data,
-                                    color: colors.progressBackground
+                                    color: colors.progressTint
                                 }],
                             loadedDays: this.state.loadedDays + 1,
                             isPedometerAvailable: true,
@@ -175,7 +175,7 @@ export default class WeekScreen extends React.Component {
                                        showEvenNumberXaxisLabel={false}
                                        height={200}
                                        defaultColumnWidth={25}
-                                       highlightColor={colors.progressTint}
+                                       highlightColor={colors.progressBackground}
                             />
                         </Row>
                         <Row size={1}>{/* 3 internal columns for separating the 3 different values*/}

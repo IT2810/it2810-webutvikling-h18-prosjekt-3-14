@@ -71,8 +71,8 @@ export default class TodayScreen extends React.Component {
                         pastStepCount: result.steps,
                         pedometerStatusMsg: 'OK',
                     });
-                    AsyncStorage.setItem('userToken', JSON.stringify(this.state.user), () => {
-                        AsyncStorage.mergeItem('userToken', JSON.stringify({steps: result.steps}));
+                    AsyncStorage.setItem('USER', JSON.stringify(this.state.user), () => {
+                        AsyncStorage.mergeItem('USER', JSON.stringify({steps: result.steps}));
                     });
                 },
                 error => {

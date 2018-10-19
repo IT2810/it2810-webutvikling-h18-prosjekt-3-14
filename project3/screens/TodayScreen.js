@@ -121,7 +121,7 @@ export default class TodayScreen extends React.Component {
     } else {  // Show normal view
       return (
         <View style={styles.container}>
-          <Grid>  /* Grid with 2 rows*/
+          <Grid>{/* Grid with 2 rows*/}
             <Row size={3}>
               <AnimatedCircularProgress
                 size={this.constants.circularBigSize}
@@ -137,7 +137,7 @@ export default class TodayScreen extends React.Component {
                 )}
               </AnimatedCircularProgress>
             </Row>
-            <Row size={1}> /* 3 internal columns for separating the 3 different values*/
+            <Row size={1}>{/* 3 internal columns for separating the 3 different values*/}
               <Col>
                 <Text style={styles.underTextLarge}>{(distanceDisplayed).toFixed(2)}</Text>
                 <Text style={styles.underTextSmall}>{distanceUnit}</Text>

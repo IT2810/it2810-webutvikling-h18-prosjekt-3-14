@@ -1,11 +1,12 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {ActivityIndicator, Text, View, StyleSheet, AsyncStorage} from 'react-native';
 import PureChart from 'react-native-pure-chart';
 import colors from '../constants/Colors';
 import layout from "../constants/Layout";
 import {Col, Grid, Row} from "react-native-easy-grid";
-import {EventRegister} from "react-native-event-listeners";
 import {Pedometer} from "expo";
+import helpers from "../utils/Helpers";
+import {EventRegister} from "react-native-event-listeners";
 
 
 export default class WeekScreen extends React.Component {
@@ -17,11 +18,30 @@ export default class WeekScreen extends React.Component {
                     data: null,
                     color: colors.progressBackground
                 }],
-            };
+            daysToLoad: null,
+            loadedDays: null,
+            userGoal: null,
+            userWeight: null,
+            userHeight: null,
+        };
     }
 
+
     componentDidMount() {
-        this.getStepCount();  // Get users step count from Pedometer
+        this.getStepCounts();  // Get users step count from Pedometer
+        this.updateFromStorage(); // Get the newest update in AsyncStorage
+    }
+
+
+    componentWillUnmount() {
+        EventRegister.removeEventListener(this.storageUpdateListener); // Unregister EventListener
+    }
+
+
+    componentWillMount() {
+        this.storageUpdateListener = EventRegister.addEventListener('updateAsyncStorage', () => { // Add EventListener
+            this.updateFromStorage();
+        })
     }
 
 
@@ -30,7 +50,7 @@ export default class WeekScreen extends React.Component {
      * @returns {Promise<void>}
      * @private
      */
-    getStepCount() {
+    getStepCounts() {
         let data = [
             {x: 'Mon', y: 0},
             {x: 'Tue', y: 0},
@@ -42,20 +62,22 @@ export default class WeekScreen extends React.Component {
         ];
         let today = new Date();
         // Right shift days to have monday as 0th day
-        let today_day = today.getDay() + -1;
-        if (today_day < 0) today_day = 6;
+        let todayDay = today.getDay() + -1;
+        if (todayDay < 0) todayDay = 6;
+        this.setState({
+            daysToLoad: todayDay + 1
+        });
 
         // Iterate over all days from monday until today
-        for (let day = 0; day <= today_day; day++) {
+        for (let day = 0; day <= todayDay; day++) {
             let from = new Date();
-            from.setDate(from.getDate() - (today_day - day));
+            from.setDate(from.getDate() - (todayDay - day));
             let to = new Date();
-            to.setDate(to.getDate() - (today_day - day));
-            console.log(from.getDate());
+            to.setDate(to.getDate() - (todayDay - day));
 
             from.setHours(0, 0, 0, 0);
             // If this is the current day, use the current time. If not, use the whole day.
-            if (day !== today_day) {
+            if (day !== todayDay) {
                 to.setHours(23, 59, 59, 0)
             }
 
@@ -69,6 +91,7 @@ export default class WeekScreen extends React.Component {
                                     data: data,
                                     color: colors.progressBackground
                                 }],
+                            loadedDays: this.state.loadedDays + 1,
                             isPedometerAvailable: true,
                             pedometerStatusMsg: 'OK',
                         });
@@ -83,50 +106,105 @@ export default class WeekScreen extends React.Component {
     };
 
 
+    /**
+     * Gets user details from async storage and updates states
+     * @returns {Promise<void>}
+     * @private
+     */
+    updateFromStorage() {
+        AsyncStorage.getItem('USER', (err, result) => {
+            let user = JSON.parse(result);
+            console.log(result);
+            console.log(user);
+            this.setState({
+                isLoading: false,
+                userGoal: user.goal,
+                userWeight: user.weight,
+                userHeight: user.height,
+            })
+        });
+    };
+
+
     render() {
-        return (
-            <View style={styles.container}>
-                <Grid>{/* Grid with 2 rows*/}
-                    <Row size={3}>
-                        <PureChart data={this.state.weekData}
-                                   type='bar'
-                                   showEvenNumberXaxisLabel={false}
-                                   height={200}
-                                   defaultColumnWidth={25}
-                                   highlightColor={colors.progressTint}
-                        />
-                    </Row>
-                    <Row size={1}>{/* 3 internal columns for separating the 3 different values*/}
-                        <Col>
-                            <Text style={styles.underTextLarge}>Avg</Text>
-                            <Text style={styles.underTextSmall}>Unit</Text>
-                        </Col>
-                        <Col>
-                            <Text style={styles.underTextLarge}>Min</Text>
-                            <Text style={styles.underTextSmall}>Unit</Text>
-                        </Col>
-                        <Col>
-                            <Text style={styles.underTextLarge}>Max</Text>
-                            <Text style={styles.underTextSmall}>Unit</Text>
-                        </Col>
-                    </Row>
-                    <Row size={1}>{/* 3 internal columns for separating the 3 different values*/}
-                        <Col>
-                            <Text style={styles.underTextLarge}>Avg</Text>
-                            <Text style={styles.underTextSmall}>Unit</Text>
-                        </Col>
-                        <Col>
-                            <Text style={styles.underTextLarge}>Min</Text>
-                            <Text style={styles.underTextSmall}>Unit</Text>
-                        </Col>
-                        <Col>
-                            <Text style={styles.underTextLarge}>Max</Text>
-                            <Text style={styles.underTextSmall}>Unit</Text>
-                        </Col>
-                    </Row>
-                </Grid>
-            </View>
-        );
+        if (!this.state.isPedometerAvailable) { // Show error screen if there pedometer isn't available
+            return (
+                <View style={styles.container}>
+                    <Text style={styles.errorMsg}>{this.state.pedometerStatusMsg}</Text>
+                </View>
+            );
+        } else if (this.state.loadedDays !== this.state.daysToLoad) {  // Show loading screen while data not collected from AsyncStorage
+            return (
+                <View styles={styles.loading}>
+                    <ActivityIndicator style={{top: layout.windowSize.height / 3}}/>
+                    <Text style={styles.loading}>Loading data..</Text>
+                </View>
+            ); }
+            else {
+            // Parse data state
+            let data = this.state.weekData[0]["data"];
+            let maxSteps = data[0]["y"];
+            let maxStepDay = "";
+            let totalSteps = 0;
+            let reachedGoalCounter = 0;
+            let currentDay = parseInt(this.state.daysToLoad);
+            data.forEach((element) => {
+                let steps = element["y"];
+                if (steps > maxSteps) {
+                    maxSteps = steps;
+                    maxStepDay = element["x"];
+                }
+                if (steps >= parseInt(this.state.userGoal)) reachedGoalCounter += 1;
+                totalSteps += steps;
+            });
+            maxStepDay = maxStepDay.toLowerCase();
+            let totalCals = helpers.calculateCaloriesBurned(
+                parseInt(this.state.userWeight),
+                parseInt(this.state.userHeight),
+                totalSteps);
+            let totalDistance = helpers.calculateDistance(parseInt(this.state.userHeight), totalSteps);
+            let distanceDisplayed = totalDistance > 1000 ? totalDistance / 1000 : totalDistance;
+            let distanceUnit = totalDistance > 1000 ? "km" : "meters";
+
+            return (
+                <View style={styles.container}>
+                    <Grid>{/* Grid with 2 rows*/}
+                        <Row size={3}>
+                            <PureChart data={this.state.weekData}
+                                       type='bar'
+                                       showEvenNumberXaxisLabel={false}
+                                       height={200}
+                                       defaultColumnWidth={25}
+                                       highlightColor={colors.progressTint}
+                            />
+                        </Row>
+                        <Row size={1}>{/* 3 internal columns for separating the 3 different values*/}
+                            <Col>
+                                <Text style={styles.underTextLarge}>{distanceDisplayed.toFixed(2)}</Text>
+                                <Text style={styles.underTextSmall}>{distanceUnit}</Text>
+                            </Col>
+                            <Col>
+                                <Text style={styles.underTextLarge}>{totalCals}</Text>
+                                <Text style={styles.underTextSmall}>calories</Text>
+                            </Col>
+                            <Col>
+                                <Text style={styles.underTextLarge}>{totalSteps}</Text>
+                                <Text style={styles.underTextSmall}>steps</Text>
+                            </Col>
+                        </Row>
+                        <Row size={1}>{/* 3 internal columns for separating the 3 different values*/}
+                            <Col>
+                                <Text style={styles.underTextLarge}>{reachedGoalCounter} / {currentDay}</Text>
+                                <Text style={styles.underTextSmall}>Goals reached</Text>
+                            </Col>
+                            <Col>
+                                <Text style={styles.underTextLarge}>{maxSteps}</Text>
+                                <Text style={styles.underTextSmall}>max steps ({maxStepDay})</Text>
+                            </Col>
+                        </Row>
+                    </Grid>
+                </View>
+            ); }
     }
 }
 

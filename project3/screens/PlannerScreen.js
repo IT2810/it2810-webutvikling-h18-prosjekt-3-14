@@ -3,6 +3,8 @@ import Expo, {Pedometer} from "expo";
 import {View, Text, StyleSheet} from 'react-native';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 
+import ColoredRule from '../components/ColoredRule'
+
 import colors from '../constants/Colors'
 import layout from '../constants/Layout'
 
@@ -16,6 +18,7 @@ export default class PlannerScreen extends React.Component {
     return (
       <View style={styles.container}>
         <Calendar style={styles.calendar}/>
+        <ColoredRule color={'black'}/>
       </View>
     );
   }

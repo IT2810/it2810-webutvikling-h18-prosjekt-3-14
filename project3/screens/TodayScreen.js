@@ -41,9 +41,18 @@ export default class TodayScreen extends React.Component {
     this.unsubscribe();
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    this.subscribeToPedometerUpdates();
     this.updateFromStorage(); // Get the newest update in AsyncStorage
-    this.getStepCount();  // Get users step count from Pedometer
+    await this.getStepCount();  // Get users step count from Pedometer
+  }
+
+  subscribeToPedometerUpdates() {
+    this._subscription = Pedometer.watchStepCount(result => {
+      this.setState({
+        currentStepCount: result.steps
+      });
+    });
   }
 
   /**
@@ -51,19 +60,13 @@ export default class TodayScreen extends React.Component {
    * @returns {Promise<void>}
    * @private
    */
-  getStepCount() {
-    this._subscription = Pedometer.watchStepCount(result => {
-      this.setState({
-        currentStepCount: result.steps
-      });
-    });
-
+  async getStepCount() {
     // Set dates to be today
     const end = new Date();
     let start = new Date();
     start.setHours(0, 0, 0, 0);   // Set time so that you get all steps from 00:00 today
 
-    Pedometer.getStepCountAsync(start, end)
+    await Pedometer.getStepCountAsync(start, end)
       .then(result => {
           this.setState({
             isPedometerAvailable: true,

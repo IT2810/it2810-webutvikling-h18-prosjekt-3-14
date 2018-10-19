@@ -1,0 +1,283 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PedometerScreen Matches snapshot. 1`] = `
+<Component
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "lightblue",
+      "flex": 1,
+      "paddingBottom": 23.82142857142857,
+    }
+  }
+>
+  <Card
+    containerStyle={
+      Object {
+        "backgroundColor": "white",
+        "borderBottomLeftRadius": 7,
+        "borderBottomRightRadius": 50,
+        "borderBottomWidth": 1,
+        "borderColor": "dodgerblue",
+        "borderLeftWidth": 1,
+        "borderRightWidth": 1,
+        "borderTopLeftRadius": 50,
+        "borderTopRightRadius": 7,
+        "borderTopWidth": 1,
+      }
+    }
+    title="Loading.."
+  >
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "flex": 1,
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "alignItems": "center",
+          }
+        }
+      >
+        <Icon
+          color="black"
+          onPress={[Function]}
+          raised={false}
+          reverse={false}
+          reverseColor="white"
+          size={125}
+          underlayColor="white"
+        />
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "fontSize": 35.714285714285715,
+              "textAlign": "center",
+            }
+          }
+        >
+          0%
+        </Text>
+      </Component>
+      <Component>
+        <Icon
+          color="#001f3f"
+          name="directions-run"
+          raised={false}
+          reverse={false}
+          reverseColor="white"
+          size={375}
+          underlayColor="white"
+        />
+      </Component>
+      <Component
+        style={
+          Object {
+            "alignItems": "center",
+          }
+        }
+      >
+        <Icon
+          color="#E47A2E"
+          name="whatshot"
+          onPress={[Function]}
+          raised={false}
+          reverse={false}
+          reverseColor="white"
+          size={125}
+          underlayColor="white"
+        />
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "fontSize": 35.714285714285715,
+              "textAlign": "center",
+            }
+          }
+        >
+          0
+        </Text>
+      </Component>
+    </Component>
+    <Component
+      style={
+        Object {
+          "flex": 1,
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "alignItems": "center",
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "color": "dodgerblue",
+              "fontSize": 150,
+              "marginBottom": 1,
+              "marginTop": 14,
+            }
+          }
+        >
+          📏
+        </Text>
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "fontSize": 35.714285714285715,
+              "textAlign": "center",
+            }
+          }
+        >
+          0cm
+        </Text>
+      </Component>
+      <Component
+        style={
+          Object {
+            "alignItems": "center",
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "color": "dodgerblue",
+              "fontSize": 150,
+              "marginBottom": 1,
+              "marginTop": 14,
+            }
+          }
+        >
+          🏋️‍
+        </Text>
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "fontSize": 35.714285714285715,
+              "textAlign": "center",
+            }
+          }
+        >
+          0kg
+        </Text>
+      </Component>
+      <Component
+        style={
+          Object {
+            "alignItems": "center",
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          onPress={[Function]}
+          style={
+            Object {
+              "color": "dodgerblue",
+              "fontSize": 150,
+              "marginBottom": 1,
+              "marginTop": 14,
+            }
+          }
+        >
+          🏆
+        </Text>
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "fontSize": 35.714285714285715,
+              "textAlign": "center",
+            }
+          }
+        >
+          0
+        </Text>
+      </Component>
+    </Component>
+    <Component
+      style={
+        Object {
+          "alignItems": "center",
+          "flex": 0.58,
+        }
+      }
+    >
+      <TouchableOpacity
+        activeOpacity={0.2}
+        onLongPress={[Function]}
+        onPress={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#2ECC40",
+            "borderBottomLeftRadius": 7,
+            "borderBottomRightRadius": 50,
+            "borderBottomWidth": 1,
+            "borderLeftWidth": 1,
+            "borderRightWidth": 1,
+            "borderTopLeftRadius": 50,
+            "borderTopRightRadius": 7,
+            "borderTopWidth": 1,
+            "height": 214.28571428571428,
+            "justifyContent": "center",
+            "width": 600,
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "color": "white",
+              "fontSize": 35.714285714285715,
+              "margin": 10,
+              "textAlign": "center",
+            }
+          }
+        >
+          "Only I can change my life. No one can do it for me" - Carol Burnett
+           
+        </Text>
+      </TouchableOpacity>
+    </Component>
+  </Card>
+</Component>
+`;

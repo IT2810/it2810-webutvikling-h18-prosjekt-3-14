@@ -43,7 +43,7 @@ export default class RegisterScreen extends React.Component {
                 style={styles.input}
                 onChangeText={(text) => this.setState({age: text})}
                 placeholder="21"
-                value={this.state.age}
+                value={this.state.age.toString()}
                 keyboardType="number-pad"
                 returnKeyType="done"
               />
@@ -52,7 +52,7 @@ export default class RegisterScreen extends React.Component {
                 style={styles.input}
                 onChangeText={(text) => this.setState({weight: text})}
                 placeholder="79,0 (kg)"
-                value={this.state.weight}
+                value={this.state.weight.toString()}
                 keyboardType="numeric"
                 returnKeyType="done"
               />
@@ -61,7 +61,7 @@ export default class RegisterScreen extends React.Component {
                 style={styles.input}
                 onChangeText={(text) => this.setState({height: text})}
                 placeholder="182,5 (cm)"
-                value={this.state.height}
+                value={this.state.height.toString()}
                 keyboardType="numeric"
                 returnKeyType="done"
               />
@@ -71,7 +71,7 @@ export default class RegisterScreen extends React.Component {
                 style={styles.input}
                 onChangeText={(text) => this.setState({goal: text})}
                 placeholder="Enter your target step count per day"
-                value={this.state.goal}
+                value={this.state.goal.toString()}
                 keyboardType="number-pad"
                 returnKeyType="done"
               />

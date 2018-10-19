@@ -1,0 +1,340 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PedometerScreen Matches snapshot. 1`] = `
+<Component
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#F8F8F8",
+      "flex": 1,
+      "paddingTop": 20,
+    }
+  }
+>
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+    style={
+      Object {
+        "color": "dodgerblue",
+        "fontSize": 23,
+        "marginBottom": 1,
+        "marginTop": 14,
+      }
+    }
+  >
+     
+    🤵
+     Name 
+  </Text>
+  <TextInput
+    allowFontScaling={true}
+    enablesReturnKeyAutomatically={true}
+    label="Name"
+    onChangeText={[Function]}
+    placeholder="Jon Doe"
+    returnKeyType="next"
+    style={
+      Object {
+        "backgroundColor": "white",
+        "borderBottomLeftRadius": 7,
+        "borderBottomRightRadius": 50,
+        "borderBottomWidth": 1,
+        "borderColor": "dodgerblue",
+        "borderLeftWidth": 1,
+        "borderRightWidth": 1,
+        "borderTopLeftRadius": 50,
+        "borderTopRightRadius": 7,
+        "borderTopWidth": 1,
+        "fontSize": 14,
+        "height": "3.7%",
+        "textAlign": "center",
+        "width": "85%",
+      }
+    }
+    textContentType="name"
+    value=""
+  />
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+    style={
+      Object {
+        "color": "dodgerblue",
+        "fontSize": 23,
+        "marginBottom": 1,
+        "marginTop": 14,
+      }
+    }
+  >
+    🔢 Age
+  </Text>
+  <TextInput
+    allowFontScaling={true}
+    keyboardType="number-pad"
+    onChangeText={[Function]}
+    placeholder="21"
+    returnKeyType="done"
+    style={
+      Object {
+        "backgroundColor": "white",
+        "borderBottomLeftRadius": 7,
+        "borderBottomRightRadius": 50,
+        "borderBottomWidth": 1,
+        "borderColor": "dodgerblue",
+        "borderLeftWidth": 1,
+        "borderRightWidth": 1,
+        "borderTopLeftRadius": 50,
+        "borderTopRightRadius": 7,
+        "borderTopWidth": 1,
+        "fontSize": 14,
+        "height": "3.7%",
+        "textAlign": "center",
+        "width": "85%",
+      }
+    }
+    value={0}
+  />
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+    style={
+      Object {
+        "color": "dodgerblue",
+        "fontSize": 23,
+        "marginBottom": 1,
+        "marginTop": 14,
+      }
+    }
+  >
+    🏋️‍
+     Weight 
+  </Text>
+  <TextInput
+    allowFontScaling={true}
+    keyboardType="numeric"
+    onChangeText={[Function]}
+    placeholder="79,0 (kg)"
+    returnKeyType="done"
+    style={
+      Object {
+        "backgroundColor": "white",
+        "borderBottomLeftRadius": 7,
+        "borderBottomRightRadius": 50,
+        "borderBottomWidth": 1,
+        "borderColor": "dodgerblue",
+        "borderLeftWidth": 1,
+        "borderRightWidth": 1,
+        "borderTopLeftRadius": 50,
+        "borderTopRightRadius": 7,
+        "borderTopWidth": 1,
+        "fontSize": 14,
+        "height": "3.7%",
+        "textAlign": "center",
+        "width": "85%",
+      }
+    }
+    value={0}
+  />
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+    style={
+      Object {
+        "color": "dodgerblue",
+        "fontSize": 23,
+        "marginBottom": 1,
+        "marginTop": 14,
+      }
+    }
+  >
+    📏 Height
+  </Text>
+  <TextInput
+    allowFontScaling={true}
+    keyboardType="numeric"
+    onChangeText={[Function]}
+    placeholder="182,5 (cm)"
+    returnKeyType="done"
+    style={
+      Object {
+        "backgroundColor": "white",
+        "borderBottomLeftRadius": 7,
+        "borderBottomRightRadius": 50,
+        "borderBottomWidth": 1,
+        "borderColor": "dodgerblue",
+        "borderLeftWidth": 1,
+        "borderRightWidth": 1,
+        "borderTopLeftRadius": 50,
+        "borderTopRightRadius": 7,
+        "borderTopWidth": 1,
+        "fontSize": 14,
+        "height": "3.7%",
+        "textAlign": "center",
+        "width": "85%",
+      }
+    }
+    value={0}
+  />
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+    style={
+      Object {
+        "color": "dodgerblue",
+        "fontSize": 23,
+        "marginBottom": 1,
+        "marginTop": 14,
+      }
+    }
+  >
+     🏆 Goal 
+  </Text>
+  <TextInput
+    allowFontScaling={true}
+    keyboardType="number-pad"
+    onChangeText={[Function]}
+    placeholder="Enter your target step count per day"
+    returnKeyType="done"
+    style={
+      Object {
+        "backgroundColor": "white",
+        "borderBottomLeftRadius": 7,
+        "borderBottomRightRadius": 50,
+        "borderBottomWidth": 1,
+        "borderColor": "dodgerblue",
+        "borderLeftWidth": 1,
+        "borderRightWidth": 1,
+        "borderTopLeftRadius": 50,
+        "borderTopRightRadius": 7,
+        "borderTopWidth": 1,
+        "fontSize": 14,
+        "height": "3.7%",
+        "textAlign": "center",
+        "width": "85%",
+      }
+    }
+    value={0}
+  />
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+    style={
+      Object {
+        "color": "dodgerblue",
+        "fontSize": 23,
+        "marginBottom": 1,
+        "marginTop": 14,
+      }
+    }
+  >
+    Gender
+  </Text>
+  <Component
+    style={
+      Object {
+        "flexDirection": "row",
+        "justifyContent": "center",
+        "marginTop": 10,
+      }
+    }
+  >
+    <TouchableOpacity
+      activeOpacity={0.2}
+      onPress={[Function]}
+      style={
+        Object {
+          "backgroundColor": "#6F9FD8",
+          "borderBottomLeftRadius": 7,
+          "borderBottomRightRadius": 50,
+          "borderTopLeftRadius": 50,
+          "borderTopRightRadius": 7,
+          "marginRight": 8,
+          "padding": 2,
+          "width": "40%",
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "alignItems": "center",
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "color": "white",
+              "fontSize": 30,
+            }
+          }
+        >
+          🏃‍♂️
+        </Text>
+      </Component>
+    </TouchableOpacity>
+    <TouchableOpacity
+      activeOpacity={0.2}
+      onPress={[Function]}
+      style={
+        Object {
+          "backgroundColor": "grey",
+          "borderBottomLeftRadius": 7,
+          "borderBottomRightRadius": 50,
+          "borderTopLeftRadius": 50,
+          "borderTopRightRadius": 7,
+          "marginRight": 8,
+          "padding": 2,
+          "width": "40%",
+        }
+      }
+    >
+      <Component
+        style={
+          Object {
+            "alignItems": "center",
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+          style={
+            Object {
+              "color": "white",
+              "fontSize": 30,
+            }
+          }
+        >
+          🏃‍♀️
+        </Text>
+      </Component>
+    </TouchableOpacity>
+  </Component>
+  <Component
+    style={
+      Object {
+        "marginTop": 15,
+      }
+    }
+  >
+    <Button
+      color="rgb(28, 184, 65)"
+      disabled={true}
+      onPress={[Function]}
+      title="Save"
+    />
+  </Component>
+</Component>
+`;

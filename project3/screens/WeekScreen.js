@@ -51,6 +51,7 @@ export default class WeekScreen extends React.Component {
      * @private
      */
     getStepCounts() {
+        // Standard structure of the data
         let data = [
             {x: 'Mon', y: 0},
             {x: 'Tue', y: 0},
@@ -64,6 +65,7 @@ export default class WeekScreen extends React.Component {
         // Right shift days to have monday as 0th day
         let todayDay = today.getDay() + -1;
         if (todayDay < 0) todayDay = 6;
+        // Keep track over how many days to load so that the interface renders after every day is parsed from storage
         this.setState({
             daysToLoad: todayDay + 1
         });
@@ -114,8 +116,6 @@ export default class WeekScreen extends React.Component {
     updateFromStorage() {
         AsyncStorage.getItem('USER', (err, result) => {
             let user = JSON.parse(result);
-            console.log(result);
-            console.log(user);
             this.setState({
                 isLoading: false,
                 userGoal: user.goal,
@@ -133,21 +133,22 @@ export default class WeekScreen extends React.Component {
                     <Text style={styles.errorMsg}>{this.state.pedometerStatusMsg}</Text>
                 </View>
             );
-        } else if (this.state.loadedDays !== this.state.daysToLoad) {  // Show loading screen while data not collected from AsyncStorage
+        } else if (this.state.loadedDays !== this.state.daysToLoad) {  // Show simple loading screen while data not collected from AsyncStorage
             return (
                 <View styles={styles.loading}>
                     <ActivityIndicator style={{top: layout.windowSize.height / 3}}/>
                     <Text style={styles.loading}>Loading data..</Text>
                 </View>
             ); }
-            else {
-            // Parse data state
+            else { // Show the actual interface if all the days are loaded, and the pedometer is available
+            // Parse data state and calculate relevant values for visualization
             let data = this.state.weekData[0]["data"];
             let maxSteps = data[0]["y"];
             let maxStepDay = "";
             let totalSteps = 0;
             let reachedGoalCounter = 0;
             let currentDay = parseInt(this.state.daysToLoad);
+            // Loop over every day and gather relevant data
             data.forEach((element) => {
                 let steps = element["y"];
                 if (steps > maxSteps) {
@@ -158,6 +159,7 @@ export default class WeekScreen extends React.Component {
                 totalSteps += steps;
             });
             maxStepDay = maxStepDay.toLowerCase();
+            // Calculate and formulate values
             let totalCals = helpers.calculateCaloriesBurned(
                 parseInt(this.state.userWeight),
                 parseInt(this.state.userHeight),
@@ -209,7 +211,6 @@ export default class WeekScreen extends React.Component {
 }
 
 const width = layout.windowSize.width;   //Get width of the users screen
-const height = layout.windowSize.height; //Get height of the users screen
 
 const styles = StyleSheet.create({
     container: {

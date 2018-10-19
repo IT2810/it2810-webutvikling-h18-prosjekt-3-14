@@ -12,8 +12,12 @@ export default class WeekScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            weekData: null
-        };
+            weekData: [
+                {
+                    data: null,
+                    color: colors.progressBackground
+                }],
+            };
     }
 
     componentWillMount() {

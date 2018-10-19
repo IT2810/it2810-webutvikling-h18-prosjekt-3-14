@@ -144,7 +144,6 @@ export default class ProfileScreen extends React.Component {
               color='#E47A2E'
               size={width/6}
               onPress={this._onPressScore}/>
-              />
               <Text style={styles.labeltext}>{this.state.userSteps}</Text>
             </View>
 

@@ -3,10 +3,11 @@ import {View} from 'react-native';
 
 import layout from '../constants/Layout'
 
-const coloredRule = ({color}) => (
+const ColoredRule = ({color, margin='1%', padding='3%'}) => (
   <View
     style={{
-      padding: '3%',
+      padding: padding,
+      margin: margin,
       borderBottomColor: color,
       borderBottomWidth: 1,
       opacity: 0.1,
@@ -14,4 +15,4 @@ const coloredRule = ({color}) => (
     }}
   />);
 
-export default coloredRule;
+export default ColoredRule;

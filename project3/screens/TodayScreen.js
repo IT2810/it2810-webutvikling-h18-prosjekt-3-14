@@ -42,47 +42,47 @@ export default class TodayScreen extends React.Component {
         this.unsubscribe();
     }
 
-    componentDidMount() {
-        this.updateFromStorage(); // Get the newest update in AsyncStorage
-        this.getStepCount();  // Get users step count from Pedometer
-    }
+  async componentDidMount() {
+    this.subscribeToPedometerUpdates();
+    this.updateFromStorage(); // Get the newest update in AsyncStorage
+    await this.getStepCount();  // Get users step count from Pedometer
+  }
 
-    /**
-     * Get todays steps from pedometer
-     * @returns {Promise<void>}
-     * @private
-     */
-    getStepCount() {
-        this._subscription = Pedometer.watchStepCount(result => {
-            this.setState({
-                currentStepCount: result.steps
-            });
+  subscribeToPedometerUpdates() {
+    this._subscription = Pedometer.watchStepCount(result => {
+      this.setState({
+        currentStepCount: result.steps
+      });
+    });
+  }
+
+  /**
+   * Get todays steps from pedometer
+   * @returns {Promise<void>}
+   * @private
+   */
+  async getStepCount() {
+    // Set dates to be today
+    const end = new Date();
+    let start = new Date();
+    start.setHours(0, 0, 0, 0);   // Set time so that you get all steps from 00:00 today
+
+    await Pedometer.getStepCountAsync(start, end)
+      .then(result => {
+          this.setState({
+            isPedometerAvailable: true,
+            pastStepCount: result.steps,
+            pedometerStatusMsg: 'OK',
+          });
+        },
+        error => {
+          this.setState({
+            isPedometerAvailable: false,
+            pastStepCount: 0,
+            pedometerStatusMsg: String(error),
+          });
         });
-
-        // Set dates to be today
-        const end = new Date();
-        let start = new Date();
-        start.setHours(0, 0, 0, 0);   // Set time so that you get all steps from 00:00 today
-
-        Pedometer.getStepCountAsync(start, end)
-            .then(result => {
-                    this.setState({
-                        isPedometerAvailable: true,
-                        pastStepCount: result.steps,
-                        pedometerStatusMsg: 'OK',
-                    });
-                    AsyncStorage.setItem('USER', JSON.stringify(this.state.user), () => {
-                        AsyncStorage.mergeItem('USER', JSON.stringify({steps: result.steps}));
-                    });
-                },
-                error => {
-                    this.setState({
-                        isPedometerAvailable: false,
-                        pastStepCount: 0,
-                        pedometerStatusMsg: String(error),
-                    });
-                });
-    };
+  };
 
     unsubscribe() {
         this._subscription && this._subscription.remove();

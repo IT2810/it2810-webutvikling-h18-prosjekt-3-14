@@ -8,6 +8,7 @@ import TodayScreen from '../screens/TodayScreen';
 import EditScreen from '../screens/EditScreen';
 import WeekScreen from '../screens/WeekScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import PlannerScreen from '../screens/PlannerScreen';
 
 import TabBarIcon from '../components/TabBarIcon';
 import LogoTitle from '../components/LogoTitle';
@@ -138,10 +139,36 @@ ProfileStack.navigationOptions = {
     ),
 };
 
+const PlannerStack = createStackNavigator({
+  Planner: {
+    screen: PlannerScreen,
+    title: "Planner",
+    headerTitle: <LogoTitle/>,
+    navigationOptions:({navigation}) => ({
+      title: "Planner",
+      headerTitle: <LogoTitle/>,
+    }),
+  }
+
+});
+
+PlannerStack.navigationOptions = {
+  tabBarLabel: 'Planner',
+  tabBarIcon: ({focused}) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios'
+        ? `ios-calendar${focused ? ''
+          : '-outline'}` : 'md-calendar'}
+    />
+  ),
+};
+
 export default createBottomTabNavigator({
-    TodayStack,
-    WeekStack,
-    ProfileStack,
+  TodayStack,
+  WeekStack,
+  PlannerStack,
+  ProfileStack,
 });
 
 

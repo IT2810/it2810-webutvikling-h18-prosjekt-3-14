@@ -19,6 +19,7 @@ export default class PlannerScreen extends React.Component {
       selectedDate: new Date(),
       title: "",
       time: "",
+      updated: false,
     }
   }
 
@@ -64,7 +65,10 @@ export default class PlannerScreen extends React.Component {
       });
     console.log("Data in addEvent - after push", data);
     AsyncStorage.setItem(dateString, JSON.stringify(data));
-    EventRegister.emit('updateEventList');
+    EventRegister.emit('updateEventList', new Date(this.state.selectedDate));
+    this.setState({
+      updated:true,
+    })
   };
 
   render() {

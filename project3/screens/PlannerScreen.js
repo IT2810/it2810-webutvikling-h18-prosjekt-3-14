@@ -17,7 +17,12 @@ export default class PlannerScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Calendar style={styles.calendar}/>
+        <Calendar
+          style={styles.calendar}
+          onDayPress={(day) => {console.log('selected day', day)}}
+          showWeekNumbers={true}
+
+        />
         <ColoredRule color={'black'}/>
       </View>
     );

@@ -90,7 +90,6 @@ export default class TodayScreen extends React.Component {
   };
 
   render() {
-    console.log("render");
     // Parse states
     const goal = parseInt(this.state.userGoal);
     const height = parseInt(this.state.userHeight);
@@ -119,8 +118,8 @@ export default class TodayScreen extends React.Component {
           <Text style={styles.loading}>Loading data..</Text>
         </View>
       );
-    } else {
-      return (  // Show normal view
+    } else {  // Show normal view
+      return (
         <View style={styles.container}>
           <Grid>  /* Grid with 2 rows*/
             <Row size={3}>

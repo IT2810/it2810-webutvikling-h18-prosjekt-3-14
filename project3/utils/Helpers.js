@@ -9,12 +9,11 @@ const helpers = {
    * @returns {number}
    */
   calculateCaloriesBurned: (weight, height, steps) => {
-    if (typeof weight !== typeof 0 || typeof height !== typeof 0 || typeof steps !== typeof 0) {
+    if (typeof weight !== typeof 0 || typeof height !== typeof 0 || typeof steps !== typeof 0)
       throw new TypeError("Input not numbers");
-    }
-    if (weight < 0 || height < 0 || steps < 0) {
+
+    if (weight < 0 || height < 0 || steps < 0)
       throw new RangeError("Input out of range");
-    }
 
     const distance = parseFloat(helpers.calculateDistance(height, steps));
     const time = distance / 1.34112 > 0 ? distance / 1.34112 : 1;   // Guaranteed no zero division

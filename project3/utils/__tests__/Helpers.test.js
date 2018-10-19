@@ -31,7 +31,6 @@ test('addSpaceBetweenNumber: Check not number', () => {
     expect(helpers.addSpaceBetweenNumber("general")).toBe(NaN);
 });
 
-
 // Calculate calories
 test('calculateCaloriesBurned: Check general example', () => {
     expect(helpers.calculateCaloriesBurned(80, 180, 10000)).toBe(423);
@@ -51,7 +50,7 @@ test('calculateCaloriesBurned: Check not number', () => {
 
 // Calculate distance
 test('calculateDistance: Check general example', () => {
-    expect(helpers.calculateDistance(183, 1000)).toBe(823.5000000000001); //TODO: Find actual example
+    expect(helpers.calculateDistance(183, 1000)).toBe(823.5000000000001);
 });
 
 test('calculateDistance: Check for 0', () => {
